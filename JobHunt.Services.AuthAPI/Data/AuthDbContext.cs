@@ -19,7 +19,7 @@ namespace JobHunt.Services.AuthAPI.Data
         {
             base.OnModelCreating(builder);
 
-            var EmployeerRoleId = "e5ff41ac-98fa-4003-950d-d5bbde128546";
+            var EmployerRoleId = "e5ff41ac-98fa-4003-950d-d5bbde128546";
             var JobSeekerRoleId = "f893dcc6-ed20-4acc-bbaf-b65873d368ae";
             var AdminRoleId = "2da7c8ca-1132-4c52-b78f-b7cc2da92139";
 
@@ -34,10 +34,10 @@ namespace JobHunt.Services.AuthAPI.Data
                 },
                 new IdentityRole()
                 {
-                    Id = EmployeerRoleId,
-                    Name = "Employeer",
-                    NormalizedName = "Employeer".ToUpper(),
-                    ConcurrencyStamp = EmployeerRoleId
+                    Id = EmployerRoleId,
+                    Name = "Employer",
+                    NormalizedName = "Employer".ToUpper(),
+                    ConcurrencyStamp = EmployerRoleId
                 },
                 new IdentityRole()
                 {
@@ -77,7 +77,7 @@ namespace JobHunt.Services.AuthAPI.Data
                 new()
                 {
                     UserId = adminUserId,
-                    RoleId = EmployeerRoleId
+                    RoleId = EmployerRoleId
                 },
                 new()
                 {
