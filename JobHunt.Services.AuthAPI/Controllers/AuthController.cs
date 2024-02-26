@@ -60,5 +60,34 @@ namespace JobHunt.Services.AuthAPI.Controllers
             }
             return ValidationProblem(ModelState);
         }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequstDto request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user != null)
+            {
+                var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+                if (checkPassword)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var response = new LoginResponseDto()
+                    {
+                        UserId = user.Id,
+                        FullName = user.FullName,
+                        Email = request.Email,
+                        Roles = roles.ToList(),
+                        Token = "token",
+                    };
+
+                    return Ok(response);
+                }
+            }
+            ModelState.AddModelError("", "Invalid Login Credentials");
+
+            return ValidationProblem(ModelState);
+        } 
     }
 }
