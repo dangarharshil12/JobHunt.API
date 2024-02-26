@@ -21,6 +21,24 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("{email}")]
+        public async Task<IActionResult> GetCompanyByEmail([FromRoute] string email)
+        {
+            if(email == null)
+            {
+                return BadRequest();
+            }
+            var result = await _companyRepository.GetByEmailAsync(email);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            var response = _mapper.Map<EmployerDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addDetails")]
         public async Task<IActionResult> CreateCompany([FromBody] EmployerDto request)

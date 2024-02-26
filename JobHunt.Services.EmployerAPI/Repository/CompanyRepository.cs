@@ -1,6 +1,7 @@
 ﻿using JobHunt.Services.EmployerAPI.Data;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Services.EmployerAPI.Repository
 {
@@ -13,6 +14,11 @@ namespace JobHunt.Services.EmployerAPI.Repository
             _db = db;
         }
 
+        public async Task<Employer?> GetByEmailAsync(string email)
+        {
+            return await _db.Employers.FirstOrDefaultAsync(u => u.CreatedBy.ToLower() == email.ToLower());
+        }
+
         public async Task<Employer> CreateAsync(Employer employer)
         {
             await _db.Employers.AddAsync(employer);
@@ -21,9 +27,6 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return employer;
         }
 
-        public Task<Employer?> UpdateAsync(Employer employer)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
