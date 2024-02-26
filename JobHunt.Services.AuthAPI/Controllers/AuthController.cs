@@ -1,5 +1,6 @@
 ﻿using JobHunt.Services.AuthAPI.Models;
 using JobHunt.Services.AuthAPI.Models.Dto;
+using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace JobHunt.Services.AuthAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<ApplicationUser> userManager)
+        public AuthController(UserManager<ApplicationUser> userManager, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            _tokenRepository = tokenRepository;
         }
 
         [HttpPost]
@@ -73,13 +76,14 @@ namespace JobHunt.Services.AuthAPI.Controllers
                 if (checkPassword)
                 {
                     var roles = await _userManager.GetRolesAsync(user);
+                    var token = _tokenRepository.CreateJwtToken(user, roles.ToList());
                     var response = new LoginResponseDto()
                     {
                         UserId = user.Id,
                         FullName = user.FullName,
                         Email = request.Email,
                         Roles = roles.ToList(),
-                        Token = "token",
+                        Token = token,
                     };
 
                     return Ok(response);

@@ -1,5 +1,7 @@
 using JobHunt.Services.AuthAPI.Data;
 using JobHunt.Services.AuthAPI.Models;
+using JobHunt.Services.AuthAPI.Repositories;
+using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("JobHuntConnectionString"));
 });
+
+// Configuring Repositories
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // Identity Core Configuration
 builder.Services.AddIdentityCore<ApplicationUser>()
