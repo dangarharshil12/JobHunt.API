@@ -60,7 +60,7 @@ namespace JobHunt.Services.EmployerAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employers");
+                    b.ToTable("Employers", (string)null);
                 });
 #pragma warning restore 612, 618
         }
