@@ -27,6 +27,17 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return employer;
         }
 
-        
+        public async Task<Employer?> UpdateAsync(Employer employer)
+        {
+            var existingCompany = await _db.Employers.FirstOrDefaultAsync(x => x.Id == employer.Id);
+
+            if (existingCompany != null)
+            {
+                _db.Entry(existingCompany).CurrentValues.SetValues(employer);
+                await _db.SaveChangesAsync();
+                return employer;
+            }
+            return null;
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             var result = await _companyRepository.GetByEmailAsync(email);
             if (result == null)
             {
-                return BadRequest();
+                return Ok(null);
             }
 
             var response = _mapper.Map<EmployerDto>(result);
@@ -53,6 +53,31 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             EmployerDto response = _mapper.Map<EmployerDto>(result);
 
             return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("updateDetails/{email}")]
+        public async Task<IActionResult> UpdateCompany([FromRoute] string email, [FromBody] EmployerDto request)
+        {
+            if (email == null)
+            {
+                return BadRequest();
+            }
+            var result = await _companyRepository.GetByEmailAsync(email);
+            if (result == null)
+            {
+                return NotFound(null);
+            }
+            Employer employer = _mapper.Map<Employer>(request);
+            employer.Id = result.Id;
+
+            result = await _companyRepository.UpdateAsync(employer);
+            if(result == null)
+            {
+                return BadRequest();
+            }
+            EmployerDto response = _mapper.Map<EmployerDto>(result);
+            return Ok(response);
         }
     }
 }
