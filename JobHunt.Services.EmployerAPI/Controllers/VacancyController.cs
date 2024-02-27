@@ -20,6 +20,25 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _vacancyRepository = vacancyRepository;
         }
 
+        [HttpGet]
+        [Route("getByCompany/{organizationName}")]
+        public async Task<IActionResult> GetVacancyByCompany([FromRoute] string organizationName)
+        {
+            if(organizationName == null)
+            {
+                return BadRequest();
+            }
+            var result = await _vacancyRepository.GetByNameAsync(organizationName);
+            List<VacancyDto> vacancies = [];
+
+            foreach(var item in result)
+            {
+                vacancies.Add(_mapper.Map<VacancyDto>(item));
+            }
+
+            return Ok(vacancies);
+        }
+
         [HttpPost]
         [Route("addVacancy")]
         public async Task<IActionResult> AddVacancy([FromBody] VacancyDto request)
