@@ -8,17 +8,19 @@ namespace JobHunt.Services.EmployerAPI.Models
         [Required]
         public string PublishedBy { get; set; }
         [Required]
-        public DateOnly PublishedDate { get; set;}
+        public DateTime PublishedDate { get; set;}
         [Required]
         public int NoOfVacancies { get; set; }
         [Required]
         public string MinimumQualification { get; set; }
         [Required]
+        public string JobTitle { get; set; }
+        [Required]
         public string JobDescription { get; set; }
         [Required]
         public string ExperienceRequired { get; set; }
         [Required]
-        public DateOnly LastDate { get; set; }
+        public DateTime LastDate { get; set; }
         [Required]
         public double MinimumSalary { get; set; }
         [Required]

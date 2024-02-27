@@ -27,6 +27,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Repository Configuration
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 
 var app = builder.Build();
 
