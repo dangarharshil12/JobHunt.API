@@ -28,10 +28,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         public async Task<IActionResult> GetAllVacancies()
         {
             List<Vacancy> result = await _vacancyRepository.GetAllAsync();
-            List<VacancyDto> response = [];
+            List<VacancyResponseDto> response = [];
             foreach(var vacancy in result)
             {
-                response.Add(_mapper.Map<VacancyDto>(vacancy));
+                response.Add(_mapper.Map<VacancyResponseDto>(vacancy));
             }
 
             return Ok(response);
@@ -46,7 +46,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 return BadRequest();
             }
             var result = await _vacancyRepository.GetByIdAsync(id);
-            var response = _mapper.Map<VacancyDto>(result);
+            var response = _mapper.Map<VacancyResponseDto>(result);
 
             return Ok(response);
         }
@@ -68,11 +68,11 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             var organizationName = employerDetails.Organization;
             
             var result = await _vacancyRepository.GetByNameAsync(organizationName);
-            List<VacancyDto> vacancies = [];
+            List<VacancyResponseDto> vacancies = [];
 
             foreach(var item in result)
             {
-                vacancies.Add(_mapper.Map<VacancyDto>(item));
+                vacancies.Add(_mapper.Map<VacancyResponseDto>(item));
             }
 
             return Ok(vacancies);
@@ -80,7 +80,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPost]
         [Route("addVacancy")]
-        public async Task<IActionResult> AddVacancy([FromBody] VacancyDto request)
+        public async Task<IActionResult> AddVacancy([FromBody] VacancyRequestDto request)
         {
             string email = request.PublishedBy;
             if(email == null)
@@ -90,30 +90,38 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             var employerDetails = await _companyRepository.GetByEmailAsync(email);
             request.PublishedBy = employerDetails.Organization;
 
-            if(request == null || !ModelState.IsValid)
+            if(request == null)
             {
                 return BadRequest();
             }
 
             Vacancy vacancy = _mapper.Map<Vacancy>(request);
             var result = await _vacancyRepository.CreateAsync(vacancy);
-            var response = _mapper.Map<VacancyDto>(result);
+            var response = _mapper.Map<VacancyResponseDto>(result);
 
             return Ok(response);
         }
 
         [HttpPut]
-        [Route("updateVacancy")]
-        public async Task<IActionResult> UpdateVacancy([FromBody] VacancyDto vacancyDto)
+        [Route("updateVacancy/{id}")]
+        public async Task<IActionResult> UpdateVacancy([FromBody] VacancyRequestDto vacancyDto, [FromRoute] Guid id)
         {
-            if(vacancyDto == null)
+            string email = vacancyDto.PublishedBy;
+            if (email == null)
+            {
+                return BadRequest();
+            }
+            var employerDetails = await _companyRepository.GetByEmailAsync(email);
+            vacancyDto.PublishedBy = employerDetails.Organization;
+            if (vacancyDto == null)
             {
                 return BadRequest();
             }
             Vacancy request = _mapper.Map<Vacancy>(vacancyDto);
+            request.Id = id;
             var result = await _vacancyRepository.UpdateAsync(request);
 
-            VacancyDto response = _mapper.Map<VacancyDto>(result);
+            VacancyResponseDto response = _mapper.Map<VacancyResponseDto>(result);
             return Ok(response);
         }
 
@@ -133,7 +141,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
 
             var result = await _vacancyRepository.DeleteAsync(vacancy);
-            var response = _mapper.Map<VacancyDto>(result);
+            var response = _mapper.Map<VacancyResponseDto>(result);
 
             return Ok(response);
         }

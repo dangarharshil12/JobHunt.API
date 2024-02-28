@@ -11,7 +11,8 @@ namespace JobHunt.Services.EmployerAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<Employer, EmployerDto>().ReverseMap();
-                config.CreateMap<Vacancy, VacancyDto>().ReverseMap();
+                config.CreateMap<Vacancy, VacancyResponseDto>().ReverseMap();
+                config.CreateMap<Vacancy, VacancyRequestDto>().ReverseMap();
             });
             return mappingConfig;
         }

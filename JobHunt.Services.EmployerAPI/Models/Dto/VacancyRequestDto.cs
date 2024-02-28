@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JobHunt.Services.EmployerAPI.Models.Dto
 {
-    public class VacancyDto
+    public class VacancyRequestDto
     {
-        public Guid Id { get; set; }
         public string PublishedBy { get; set; }
         public DateTime PublishedDate { get; set; }
         public int NoOfVacancies { get; set; }
