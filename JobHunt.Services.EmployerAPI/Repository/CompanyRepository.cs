@@ -14,6 +14,11 @@ namespace JobHunt.Services.EmployerAPI.Repository
             _db = db;
         }
 
+        public async Task<Employer?> GetByNameAsync(string name)
+        {
+            return await _db.Employers.FirstOrDefaultAsync(u => u.Organization.ToLower() == name.ToLower());
+        }
+
         public async Task<Employer?> GetByEmailAsync(string email)
         {
             return await _db.Employers.FirstOrDefaultAsync(u => u.CreatedBy.ToLower() == email.ToLower());

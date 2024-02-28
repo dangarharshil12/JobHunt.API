@@ -39,6 +39,24 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("getProfileByName/{name}")]
+        public async Task<IActionResult> GetCompanyByName([FromRoute] string name)
+        {
+            if (name == null)
+            {
+                return BadRequest();
+            }
+            var result = await _companyRepository.GetByNameAsync(name);
+            if (result == null)
+            {
+                return Ok(null);
+            }
+
+            var response = _mapper.Map<EmployerDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addDetails")]
         public async Task<IActionResult> CreateCompany([FromBody] EmployerDto request)
