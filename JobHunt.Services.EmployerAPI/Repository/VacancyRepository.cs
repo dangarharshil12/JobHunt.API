@@ -19,6 +19,11 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return await _db.VacancyDetails.ToListAsync();
         }
 
+        public async Task<Vacancy?> GetByIdAsync(Guid id)
+        {
+            return _db.VacancyDetails.FirstOrDefault(x => x.Id == id);
+        }
+
         public async Task<List<Vacancy>?> GetByNameAsync(string name)
         {
             return await _db.VacancyDetails.Where(u => u.PublishedBy == name).ToListAsync();

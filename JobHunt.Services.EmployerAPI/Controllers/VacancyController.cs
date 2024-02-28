@@ -38,6 +38,20 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getVacancyById/{id}")]
+        public async Task<IActionResult> GetVacancyById([FromRoute] Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _vacancyRepository.GetByIdAsync(id);
+            var response = _mapper.Map<VacancyDto>(result);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
         [Route("getByCompany/{email}")]
         public async Task<IActionResult> GetVacancyByCompany([FromRoute] string email)
         {
