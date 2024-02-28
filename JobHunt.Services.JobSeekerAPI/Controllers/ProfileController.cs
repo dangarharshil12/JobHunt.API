@@ -20,6 +20,24 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _profileRepository = profileRepository;
         }
 
+        [HttpGet]
+        [Route("getByEmail/{email}")]
+        public async Task<IActionResult> GetProfileByEmail([FromRoute] string email) 
+        {
+            if(email == null)
+            {
+                return BadRequest();
+            }
+            User result = await _profileRepository.GetByEmailAsync(email);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            UserDto response = _mapper.Map<UserDto>(result);
+            return Ok(response);
+        }
 
         [HttpPost]
         [Route("addProfile")]
