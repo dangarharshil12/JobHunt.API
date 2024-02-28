@@ -1,4 +1,8 @@
+using AutoMapper;
+using JobHunt.Services.JobSeekerAPI;
 using JobHunt.Services.JobSeekerAPI.Data;
+using JobHunt.Services.JobSeekerAPI.Repository;
+using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +19,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("JobHuntConnectionString"));
 });
+
+// Mapper Configuration
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Repository Configuration
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 var app = builder.Build();
 
