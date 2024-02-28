@@ -7,9 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{AB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{EA92AC4B-1A8A-4B94-8F20-D7DDB2141373}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.AuthAPI", "JobHunt.Services.AuthAPI\JobHunt.Services.AuthAPI.csproj", "{4FFD74FC-2D99-4D31-B407-C7C465B13B54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.AuthAPI", "JobHunt.Services.AuthAPI\JobHunt.Services.AuthAPI.csproj", "{4FFD74FC-2D99-4D31-B407-C7C465B13B54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.EmployerAPI", "JobHunt.Services.EmployerAPI\JobHunt.Services.EmployerAPI.csproj", "{A58521EA-8DB7-4031-9C86-DB066ED99D9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.EmployerAPI", "JobHunt.Services.EmployerAPI\JobHunt.Services.EmployerAPI.csproj", "{A58521EA-8DB7-4031-9C86-DB066ED99D9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.JobSeekerAPI", "JobHunt.Services.JobSeekerAPI\JobHunt.Services.JobSeekerAPI.csproj", "{219118B9-957D-4856-9A8B-98E064C3D1B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{A58521EA-8DB7-4031-9C86-DB066ED99D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A58521EA-8DB7-4031-9C86-DB066ED99D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A58521EA-8DB7-4031-9C86-DB066ED99D9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{219118B9-957D-4856-9A8B-98E064C3D1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219118B9-957D-4856-9A8B-98E064C3D1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219118B9-957D-4856-9A8B-98E064C3D1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219118B9-957D-4856-9A8B-98E064C3D1B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4FFD74FC-2D99-4D31-B407-C7C465B13B54} = {ABDCE30D-DE1A-4D3E-9A16-2FD6E05A911B}
 		{A58521EA-8DB7-4031-9C86-DB066ED99D9C} = {ABDCE30D-DE1A-4D3E-9A16-2FD6E05A911B}
+		{219118B9-957D-4856-9A8B-98E064C3D1B6} = {ABDCE30D-DE1A-4D3E-9A16-2FD6E05A911B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54D92301-4417-40C1-9DF7-BED6CBA1679C}
