@@ -116,5 +116,26 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             VacancyDto response = _mapper.Map<VacancyDto>(result);
             return Ok(response);
         }
+
+        [HttpDelete]
+        [Route("deleteVacancy/{id}")]
+        public async Task<IActionResult> DeleteVacancy(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            Vacancy vacancy = await _vacancyRepository.GetByIdAsync(id);
+            if(vacancy == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _vacancyRepository.DeleteAsync(vacancy);
+            var response = _mapper.Map<VacancyDto>(result);
+
+            return Ok(response);
+        }
     }
 }
