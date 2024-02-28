@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
@@ -13,21 +14,31 @@ namespace JobHunt.Services.EmployerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IVacancyRepository _vacancyRepository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public VacancyController(IMapper mapper, IVacancyRepository vacancyRepository)
+        public VacancyController(IMapper mapper, IVacancyRepository vacancyRepository, ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _vacancyRepository = vacancyRepository;
+            _companyRepository = companyRepository;
         }
 
         [HttpGet]
-        [Route("getByCompany/{organizationName}")]
-        public async Task<IActionResult> GetVacancyByCompany([FromRoute] string organizationName)
+        [Route("getByCompany/{email}")]
+        public async Task<IActionResult> GetVacancyByCompany([FromRoute] string email)
         {
-            if(organizationName == null)
+            if (email == null)
             {
                 return BadRequest();
             }
+            var employerDetails = await _companyRepository.GetByEmailAsync(email);
+
+            if(employerDetails == null)
+            {
+                return NotFound();
+            }
+            var organizationName = employerDetails.Organization;
+            
             var result = await _vacancyRepository.GetByNameAsync(organizationName);
             List<VacancyDto> vacancies = [];
 
@@ -43,6 +54,14 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Route("addVacancy")]
         public async Task<IActionResult> AddVacancy([FromBody] VacancyDto request)
         {
+            string email = request.PublishedBy;
+            if(email == null)
+            {
+                return BadRequest();
+            }
+            var employerDetails = await _companyRepository.GetByEmailAsync(email);
+            request.PublishedBy = employerDetails.Organization;
+
             if(request == null || !ModelState.IsValid)
             {
                 return BadRequest();
