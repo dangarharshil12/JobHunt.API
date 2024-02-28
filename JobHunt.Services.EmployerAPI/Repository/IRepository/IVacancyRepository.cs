@@ -7,5 +7,6 @@ namespace JobHunt.Services.EmployerAPI.Repository.IRepository
         Task<List<Vacancy>?> GetAllAsync();
         Task<List<Vacancy>?> GetByNameAsync(string name);
         Task<Vacancy> CreateAsync(Vacancy vacancy);
+        Task<Vacancy?> UpdateAsync(Vacancy vacancy);
     }
 }

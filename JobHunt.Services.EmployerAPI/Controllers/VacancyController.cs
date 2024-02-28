@@ -87,5 +87,20 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("updateVacancy")]
+        public async Task<IActionResult> UpdateVacancy([FromBody] VacancyDto vacancyDto)
+        {
+            if(vacancyDto == null)
+            {
+                return BadRequest();
+            }
+            Vacancy request = _mapper.Map<Vacancy>(vacancyDto);
+            var result = await _vacancyRepository.UpdateAsync(request);
+
+            VacancyDto response = _mapper.Map<VacancyDto>(result);
+            return Ok(response);
+        }
     }
 }
