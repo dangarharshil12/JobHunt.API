@@ -14,6 +14,11 @@ namespace JobHunt.Services.EmployerAPI.Repository
             _db = db;
         }
 
+        public async Task<List<Vacancy>?> GetAllAsync()
+        {
+            return await _db.VacancyDetails.ToListAsync();
+        }
+
         public async Task<List<Vacancy>?> GetByNameAsync(string name)
         {
             return await _db.VacancyDetails.Where(u => u.PublishedBy == name).ToListAsync();
@@ -24,6 +29,6 @@ namespace JobHunt.Services.EmployerAPI.Repository
             await _db.VacancyDetails.AddAsync(vacancy);
             await _db.SaveChangesAsync();
             return vacancy;
-        }       
+        }
     }
 }

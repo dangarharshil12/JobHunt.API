@@ -13,14 +13,28 @@ namespace JobHunt.Services.EmployerAPI.Controllers
     public class VacancyController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IVacancyRepository _vacancyRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IVacancyRepository _vacancyRepository;
 
         public VacancyController(IMapper mapper, IVacancyRepository vacancyRepository, ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _vacancyRepository = vacancyRepository;
             _companyRepository = companyRepository;
+        }
+
+        [HttpGet]
+        [Route("getAllVacancies")]
+        public async Task<IActionResult> GetAllVacancies()
+        {
+            List<Vacancy> result = await _vacancyRepository.GetAllAsync();
+            List<VacancyDto> response = [];
+            foreach(var vacancy in result)
+            {
+                response.Add(_mapper.Map<VacancyDto>(vacancy));
+            }
+
+            return Ok(response);
         }
 
         [HttpGet]
