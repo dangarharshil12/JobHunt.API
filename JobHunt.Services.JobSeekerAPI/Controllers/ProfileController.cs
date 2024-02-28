@@ -55,5 +55,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("updateProfile/{email}")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UserDto user, [FromRoute] string email)
+        {
+            if(user == null || email == null)
+            {
+                return BadRequest();
+            }
+
+            User request = _mapper.Map<User>(user);
+
+            var result = await _profileRepository.UpdateAsync(request);
+            if(result != null)
+            {
+                UserDto response = _mapper.Map<UserDto>(result);
+                return Ok(response);
+            }
+            return NotFound();
+        }
     }
 }

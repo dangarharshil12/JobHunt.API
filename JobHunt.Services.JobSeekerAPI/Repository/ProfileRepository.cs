@@ -25,5 +25,18 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
 
             return user;
         }
+
+        public async Task<User?> UpdateAsync(User user)
+        {
+            var existingProfile = await _db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            if (existingProfile != null)
+            {
+                _db.Entry(existingProfile).CurrentValues.SetValues(user);
+                await _db.SaveChangesAsync();
+                return user;
+            }
+            return null;
+        }
     }
 }
