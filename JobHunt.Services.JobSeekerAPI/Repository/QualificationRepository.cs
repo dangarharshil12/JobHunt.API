@@ -19,6 +19,16 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return await _db.Qualifications.ToListAsync();
         }
 
+        public async Task<Qualification?> GetByIdAsync(Guid id)
+        {
+            Qualification qualification = await _db.Qualifications.FirstOrDefaultAsync(x => x.Id == id);
+            if(qualification == null)
+            {
+                return null;
+            }
+            return qualification;
+        }
+
         public async Task<Qualification> CreateAsync(Qualification qualification)
         {
             await _db.Qualifications.AddAsync(qualification);

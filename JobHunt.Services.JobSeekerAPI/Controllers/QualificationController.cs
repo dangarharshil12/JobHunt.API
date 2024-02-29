@@ -34,6 +34,23 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetQaulificationById/{id}")]
+        public async Task<IActionResult> GetQualificationById(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _qualificationRepository.GetByIdAsync(id);
+            if(result == null)
+            {
+                return Ok(null);
+            }
+            QualificationDto response = _mapper.Map<QualificationDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addQualification")]
         public async Task<IActionResult> CreateQualification([FromBody] QualificationDto request)
