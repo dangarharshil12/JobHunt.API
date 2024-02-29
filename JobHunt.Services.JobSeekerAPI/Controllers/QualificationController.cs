@@ -90,5 +90,23 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
             return NotFound();
         }
+
+        [HttpDelete]
+        [Route("deleteQualification/{id}")]
+        public async Task<IActionResult> DeleteQualification([FromRoute] Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            Qualification qualification = await _qualificationRepository.GetByIdAsync(id);
+            if(qualification == null)
+            {
+                return BadRequest();
+            }
+            var result = await _qualificationRepository.DeleteAsync(qualification);
+            QualificationDto response = _mapper.Map<QualificationDto>(result);
+            return Ok(response);
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace JobHunt.Services.JobSeekerAPI.Repository.IRepository
         Task<Qualification?> GetByIdAsync(Guid id);
         Task<Qualification> CreateAsync(Qualification qualification);
         Task<Qualification?> UpdateAsync(Qualification qualification);
+        Task<Qualification> DeleteAsync(Qualification qualification);
     }
 }

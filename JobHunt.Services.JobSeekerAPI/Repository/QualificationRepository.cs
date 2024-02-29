@@ -48,5 +48,12 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             }
             return null;
         }
+
+        public async Task<Qualification> DeleteAsync(Qualification qualification)
+        {
+            _db.Qualifications.Remove(qualification);
+            await _db.SaveChangesAsync();
+            return qualification;
+        }
     }
 }
