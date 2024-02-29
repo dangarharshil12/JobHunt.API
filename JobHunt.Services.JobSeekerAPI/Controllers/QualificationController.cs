@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
+using JobHunt.Services.JobSeekerAPI.Repository;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,14 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllQualifications")]
-        public async Task<IActionResult> GetAllQualifications()
+        [Route("GetAllQualificationsByUserId/{id}")]
+        public async Task<IActionResult> GetAllQualifications(Guid id)
         {
-            List<Qualification> result = await _qualificationRepository.GetAllAsync();
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            List<Qualification> result = await _qualificationRepository.GetAllByUserIdAsync(id);
             List<QualificationDto> response = [];
 
             foreach(var item in result)
@@ -35,7 +40,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetQaulificationById/{id}")]
+        [Route("GetQualificationById/{id}")]
         public async Task<IActionResult> GetQualificationById(Guid id)
         {
             if(id == Guid.Empty)
@@ -65,6 +70,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             var result = await _qualificationRepository.CreateAsync(Qualification);
             QualificationDto response = _mapper.Map<QualificationDto>(result);
             return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("updateQualification")]
+        public async Task<IActionResult> UpdateQualification([FromBody] QualificationDto request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+            Qualification qualification = _mapper.Map<Qualification>(request);
+
+            var result = await _qualificationRepository.UpdateAsync(qualification);
+            if (result != null)
+            {
+                QualificationDto response = _mapper.Map<QualificationDto>(result);
+                return Ok(response);
+            }
+            return NotFound();
         }
     }
 }

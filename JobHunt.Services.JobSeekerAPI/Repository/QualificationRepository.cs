@@ -14,9 +14,9 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
-        public async Task<List<Qualification>?> GetAllAsync()
+        public async Task<List<Qualification>?> GetAllByUserIdAsync(Guid id)
         {
-            return await _db.Qualifications.ToListAsync();
+            return await _db.Qualifications.Where(u => u.UserId == id).ToListAsync();
         }
 
         public async Task<Qualification?> GetByIdAsync(Guid id)
@@ -34,6 +34,19 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             await _db.Qualifications.AddAsync(qualification);
             await _db.SaveChangesAsync();
             return qualification;
+        }
+
+        public async Task<Qualification?> UpdateAsync(Qualification qualification)
+        {
+            var existingQualification = await _db.Qualifications.FirstOrDefaultAsync(x => x.Id == qualification.Id);
+
+            if (existingQualification != null)
+            {
+                _db.Entry(existingQualification).CurrentValues.SetValues(qualification);
+                await _db.SaveChangesAsync();
+                return qualification;
+            }
+            return null;
         }
     }
 }
