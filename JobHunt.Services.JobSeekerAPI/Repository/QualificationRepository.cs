@@ -1,6 +1,7 @@
 ﻿using JobHunt.Services.JobSeekerAPI.Data;
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Services.JobSeekerAPI.Repository
 {
@@ -11,6 +12,11 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
         public QualificationRepository(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public async Task<List<Qualification>?> GetAllAsync()
+        {
+            return await _db.Qualifications.ToListAsync();
         }
 
         public async Task<Qualification> CreateAsync(Qualification qualification)

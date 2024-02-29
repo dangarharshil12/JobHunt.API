@@ -20,6 +20,20 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _qualificationRepository = qualificationRepository;
         }
 
+        [HttpGet]
+        [Route("GetAllQualifications")]
+        public async Task<IActionResult> GetAllQualifications()
+        {
+            List<Qualification> result = await _qualificationRepository.GetAllAsync();
+            List<QualificationDto> response = [];
+
+            foreach(var item in result)
+            {
+                response.Add(_mapper.Map<QualificationDto>(item));
+            }
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addQualification")]
         public async Task<IActionResult> CreateQualification([FromBody] QualificationDto request)
