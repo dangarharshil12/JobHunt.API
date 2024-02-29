@@ -10,5 +10,7 @@ namespace JobHunt.Services.JobSeekerAPI.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Qualification> Qualifications { get; set; }
+
     }
 }

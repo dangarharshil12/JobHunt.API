@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/jobSeeker")]
     [ApiController]
     public class ProfileController : ControllerBase
     {
