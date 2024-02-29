@@ -13,6 +13,8 @@ namespace JobHunt.Services.JobSeekerAPI
                 config.CreateMap<User, UserDto>().ReverseMap();
                 config.CreateMap<Qualification, QualificationResponseDto>().ReverseMap();
                 config.CreateMap<Qualification, QualificationRequestDto>().ReverseMap();
+                config.CreateMap<UserExperience, UserExperienceRequestDto>().ReverseMap();
+                config.CreateMap<UserExperience, UserExperienceResponseDto>().ReverseMap();
             });
             return mappingConfig;
         }
