@@ -2,7 +2,7 @@
 
 namespace JobHunt.Services.JobSeekerAPI.Repository.IRepository
 {
-    public interface IQualification
+    public interface IQualificationRepository
     {
         Task<Qualification> CreateAsync(Qualification qualification);
     }
