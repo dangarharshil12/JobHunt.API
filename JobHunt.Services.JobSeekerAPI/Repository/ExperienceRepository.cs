@@ -1,6 +1,7 @@
 ﻿using JobHunt.Services.JobSeekerAPI.Data;
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Services.JobSeekerAPI.Repository
 {
@@ -30,9 +31,10 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             throw new NotImplementedException();
         }
 
-        public Task<UserExperience?> GetByIdAsync(Guid id)
+        public async Task<UserExperience?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _db.UserExperiences.FirstOrDefaultAsync(x => x.Id == id);
+            return result;
         }
 
         public Task<UserExperience?> UpdateAsync(UserExperience userExperience)

@@ -19,6 +19,24 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _experienceRepository = experienceRepository;
         }
 
+        [HttpGet]
+        [Route("getExperienceById/{id}")]
+        public async Task<IActionResult> GetExperienceById(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _experienceRepository.GetByIdAsync(id);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+            var response = _mapper.Map<UserExperienceResponseDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addExperience")]
         public async Task<IActionResult> AddExperience([FromBody] UserExperienceRequestDto request)
