@@ -1,8 +1,7 @@
 ﻿namespace JobHunt.Services.JobSeekerAPI.Models.Dto
 {
-    public class UserExperienceDto
+    public class UserExperienceRequestDto
     {
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public User? User { get; set; }
         public string CompanyName { get; set; }

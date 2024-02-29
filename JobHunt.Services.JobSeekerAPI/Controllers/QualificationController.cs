@@ -73,14 +73,15 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpPut]
-        [Route("updateQualification")]
-        public async Task<IActionResult> UpdateQualification([FromBody] QualificationResponseDto request)
+        [Route("updateQualification/{id}")]
+        public async Task<IActionResult> UpdateQualification([FromBody] QualificationRequestDto request, [FromRoute] Guid id)
         {
-            if (request == null)
+            if (request == null || id == Guid.Empty)
             {
                 return BadRequest();
             }
             Qualification qualification = _mapper.Map<Qualification>(request);
+            qualification.Id = id;
 
             var result = await _qualificationRepository.UpdateAsync(qualification);
             if (result != null)
