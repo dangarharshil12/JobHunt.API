@@ -45,9 +45,11 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return null;
         }
 
-        public Task<UserExperience?> DeleteAsync(UserExperience userExperience)
+        public async Task<UserExperience> DeleteAsync(UserExperience userExperience)
         {
-            throw new NotImplementedException();
+            _db.UserExperiences.Remove(userExperience);
+            await _db.SaveChangesAsync();
+            return userExperience;
         }
     }
 }

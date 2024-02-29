@@ -91,5 +91,23 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
             return NotFound();
         }
+
+        [HttpDelete]
+        [Route("deleteExperience/{id}")]
+        public async Task<IActionResult> DeleteExperience([FromRoute] Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            UserExperience experience = await _experienceRepository.GetByIdAsync(id);
+            if(experience == null)
+            {
+                return NotFound();
+            }
+            var result = await _experienceRepository.DeleteAsync(experience);
+            UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
+            return Ok(response);
+        }
     }
 }

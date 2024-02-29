@@ -103,7 +103,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             Qualification qualification = await _qualificationRepository.GetByIdAsync(id);
             if(qualification == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             var result = await _qualificationRepository.DeleteAsync(qualification);
             QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
