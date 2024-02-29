@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/qualification")]
     [ApiController]
     public class QualificationController : ControllerBase
     {
@@ -30,11 +30,11 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 return BadRequest();
             }
             List<Qualification> result = await _qualificationRepository.GetAllByUserIdAsync(id);
-            List<QualificationDto> response = [];
+            List<QualificationResponseDto> response = [];
 
             foreach(var item in result)
             {
-                response.Add(_mapper.Map<QualificationDto>(item));
+                response.Add(_mapper.Map<QualificationResponseDto>(item));
             }
             return Ok(response);
         }
@@ -52,13 +52,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             {
                 return Ok(null);
             }
-            QualificationDto response = _mapper.Map<QualificationDto>(result);
+            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
             return Ok(response);
         }
 
         [HttpPost]
         [Route("addQualification")]
-        public async Task<IActionResult> CreateQualification([FromBody] QualificationDto request)
+        public async Task<IActionResult> CreateQualification([FromBody] QualificationRequestDto request)
         {
             if(request == null)
             {
@@ -68,13 +68,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             Qualification Qualification = _mapper.Map<Qualification>(request);
 
             var result = await _qualificationRepository.CreateAsync(Qualification);
-            QualificationDto response = _mapper.Map<QualificationDto>(result);
+            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
             return Ok(response);
         }
 
         [HttpPut]
         [Route("updateQualification")]
-        public async Task<IActionResult> UpdateQualification([FromBody] QualificationDto request)
+        public async Task<IActionResult> UpdateQualification([FromBody] QualificationResponseDto request)
         {
             if (request == null)
             {
@@ -85,7 +85,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             var result = await _qualificationRepository.UpdateAsync(qualification);
             if (result != null)
             {
-                QualificationDto response = _mapper.Map<QualificationDto>(result);
+                QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
                 return Ok(response);
             }
             return NotFound();
@@ -105,7 +105,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 return BadRequest();
             }
             var result = await _qualificationRepository.DeleteAsync(qualification);
-            QualificationDto response = _mapper.Map<QualificationDto>(result);
+            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
             return Ok(response);
         }
     }

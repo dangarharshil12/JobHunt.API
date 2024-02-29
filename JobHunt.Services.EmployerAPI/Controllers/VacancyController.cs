@@ -63,7 +63,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
             if(employerDetails == null)
             {
-                return NotFound();
+                return Ok(null);
             }
             var organizationName = employerDetails.Organization;
             

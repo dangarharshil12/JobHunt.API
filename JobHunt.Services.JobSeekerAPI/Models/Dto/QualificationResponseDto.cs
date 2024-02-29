@@ -1,6 +1,6 @@
 ﻿namespace JobHunt.Services.JobSeekerAPI.Models.Dto
 {
-    public class QualificationDto
+    public class QualificationResponseDto
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
