@@ -26,9 +26,9 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             throw new NotImplementedException();
         }
 
-        public Task<List<UserExperience>?> GetAllByUserIdAsync(Guid id)
+        public async Task<List<UserExperience>?> GetAllByUserIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _db.UserExperiences.Where(u => u.UserId == id).ToListAsync();
         }
 
         public async Task<UserExperience?> GetByIdAsync(Guid id)

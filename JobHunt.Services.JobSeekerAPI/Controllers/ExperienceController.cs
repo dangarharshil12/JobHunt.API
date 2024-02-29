@@ -4,6 +4,7 @@ using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {
@@ -34,6 +35,24 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 return NotFound();
             }
             var response = _mapper.Map<UserExperienceResponseDto>(result);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("getAllExperiencesByUserId/{userId}")]
+        public async Task<IActionResult> GetAllExperiencesByUserId(Guid userId)
+        {
+            if(userId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            List<UserExperience> result = await _experienceRepository.GetAllByUserIdAsync(userId);
+            List<UserExperienceResponseDto> response = [];
+
+            foreach(var item in result)
+            {
+                response.Add(_mapper.Map<UserExperienceResponseDto>(item));
+            }
             return Ok(response);
         }
 
