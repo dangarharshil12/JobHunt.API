@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
+using JobHunt.Services.JobSeekerAPI.Repository;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,24 +22,6 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getExperienceById/{id}")]
-        public async Task<IActionResult> GetExperienceById(Guid id)
-        {
-            if(id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-            var result = await _experienceRepository.GetByIdAsync(id);
-
-            if(result == null)
-            {
-                return NotFound();
-            }
-            var response = _mapper.Map<UserExperienceResponseDto>(result);
-            return Ok(response);
-        }
-
-        [HttpGet]
         [Route("getAllExperiencesByUserId/{userId}")]
         public async Task<IActionResult> GetAllExperiencesByUserId(Guid userId)
         {
@@ -56,6 +39,24 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("getExperienceById/{id}")]
+        public async Task<IActionResult> GetExperienceById(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _experienceRepository.GetByIdAsync(id);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+            var response = _mapper.Map<UserExperienceResponseDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addExperience")]
         public async Task<IActionResult> AddExperience([FromBody] UserExperienceRequestDto request)
@@ -69,6 +70,26 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
             var response = _mapper.Map<UserExperienceResponseDto>(result);
             return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("updateExperience/{id}")]
+        public async Task<IActionResult> UpdateExperience([FromBody] UserExperienceRequestDto request, [FromRoute] Guid id)
+        {
+            if(id == Guid.Empty || request == null)
+            {
+                return BadRequest();
+            }
+            UserExperience experience = _mapper.Map<UserExperience>(request);
+            experience.Id = id;
+
+            var result = await _experienceRepository.UpdateAsync(experience);
+            if (result != null)
+            {
+                UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
+                return Ok(response);
+            }
+            return NotFound();
         }
     }
 }

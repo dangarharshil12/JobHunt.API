@@ -8,6 +8,6 @@ namespace JobHunt.Services.JobSeekerAPI.Repository.IRepository
         Task<UserExperience?> GetByIdAsync(Guid id);
         Task<UserExperience> CreateAsync(UserExperience userExperience);
         Task<UserExperience?> UpdateAsync(UserExperience userExperience);
-        Task<UserExperience?> DeleteAsync(UserExperience userExperience);
+        Task<UserExperience> DeleteAsync(UserExperience userExperience);
     }
 }

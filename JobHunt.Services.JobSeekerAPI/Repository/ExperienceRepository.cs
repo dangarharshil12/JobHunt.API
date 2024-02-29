@@ -14,18 +14,6 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
-        public async Task<UserExperience> CreateAsync(UserExperience userExperience)
-        {
-            await _db.UserExperiences.AddAsync(userExperience);
-            await _db.SaveChangesAsync();
-            return userExperience;
-        }
-
-        public Task<UserExperience?> DeleteAsync(UserExperience userExperience)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<UserExperience>?> GetAllByUserIdAsync(Guid id)
         {
             return await _db.UserExperiences.Where(u => u.UserId == id).ToListAsync();
@@ -37,7 +25,27 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return result;
         }
 
-        public Task<UserExperience?> UpdateAsync(UserExperience userExperience)
+        public async Task<UserExperience> CreateAsync(UserExperience userExperience)
+        {
+            await _db.UserExperiences.AddAsync(userExperience);
+            await _db.SaveChangesAsync();
+            return userExperience;
+        }
+
+        public async Task<UserExperience?> UpdateAsync(UserExperience userExperience)
+        {
+            var existingExperience = await _db.UserExperiences.FirstOrDefaultAsync(x => x.Id == userExperience.Id);
+
+            if (existingExperience != null)
+            {
+                _db.Entry(existingExperience).CurrentValues.SetValues(userExperience);
+                await _db.SaveChangesAsync();
+                return userExperience;
+            }
+            return null;
+        }
+
+        public Task<UserExperience?> DeleteAsync(UserExperience userExperience)
         {
             throw new NotImplementedException();
         }
