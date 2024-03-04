@@ -13,6 +13,11 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
+        public async Task<List<User>> GetUsersAsync()
+        {
+            return await _db.Users.ToListAsync();
+        }
+
         public async Task<User> GetByEmailAsync(string email)
         {
             return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);

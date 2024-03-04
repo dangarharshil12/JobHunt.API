@@ -21,6 +21,20 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getUsers")]
+        public async Task<IActionResult> GetUsers()
+        {
+            List<User> users = await _profileRepository.GetUsersAsync();
+            var response = new List<UserDto>();
+            foreach (var user in users)
+            {
+                response.Add(_mapper.Map<UserDto>(user));
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet]
         [Route("getByEmail/{email}")]
         public async Task<IActionResult> GetProfileByEmail([FromRoute] string email) 
         {

@@ -12,10 +12,12 @@ namespace JobHunt.Services.EmployerAPI.Controllers
     public class ApplicationController : ControllerBase
     {
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IProfileRepository _profileRepository;
         private readonly IMapper _mapper;
 
-        public ApplicationController(IApplicationRepository applicationRepository, IMapper mapper)
+        public ApplicationController(IApplicationRepository applicationRepository, IMapper mapper, IProfileRepository profileRepository)
         {
+            _profileRepository = profileRepository;
             _applicationRepository = applicationRepository;
             _mapper = mapper;
         }
@@ -45,12 +47,20 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 return BadRequest();
             }
-            var result = await _applicationRepository.GetAllByVacancyIdAsync(id);
+            List<UserVacancyRequest> result = await _applicationRepository.GetAllByVacancyIdAsync(id);
+
             List<UserVacancyResponseDto> response = [];
             foreach (var application in result)
             {
                 response.Add(_mapper.Map<UserVacancyResponseDto>(application));
             }
+
+            List<UserDto> users = await _profileRepository.GetUsers();
+            foreach(var item in response)
+            {
+                item.User = users.FirstOrDefault(u => u.Id == item.UserId);
+            }
+
             return Ok(response);
         }
 
@@ -66,7 +76,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
             if(existingVacancy != null)
             {
-                return Ok("Already Applied");
+                return Ok(null);
             }
             var result = await _applicationRepository.CreateAsync(userVacancyRequest);
             var response = _mapper.Map<UserVacancyResponseDto>(result);

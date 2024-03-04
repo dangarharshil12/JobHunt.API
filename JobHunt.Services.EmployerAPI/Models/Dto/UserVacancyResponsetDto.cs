@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public Guid VacancyId { get; set; }
         public Vacancy? Vacancy { get; set; }
+        public UserDto? User { get; set; }
         public Guid UserId { get; set; }
         public DateTime AppliedDate { get; set; }
     }
