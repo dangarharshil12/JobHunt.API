@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
-using JobHunt.Services.JobSeekerAPI.Repository;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {

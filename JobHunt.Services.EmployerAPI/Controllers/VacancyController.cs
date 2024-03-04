@@ -3,7 +3,6 @@ using Azure.Core;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.EmployerAPI.Controllers

@@ -1,7 +1,6 @@
 ﻿using JobHunt.Services.AuthAPI.Models;
 using JobHunt.Services.AuthAPI.Models.Dto;
 using JobHunt.Services.AuthAPI.Repositories.IRepositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-namespace JobHunt.Services.EmployerAPI.Models.Dto
+﻿namespace JobHunt.Services.EmployerAPI.Models.Dto
 {
     public class VacancyRequestDto
     {

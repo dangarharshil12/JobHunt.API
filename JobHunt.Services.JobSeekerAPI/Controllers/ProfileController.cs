@@ -2,7 +2,6 @@
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
@@ -57,7 +56,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [Route("getByUserId/{userId}")]
         public async Task<IActionResult> GetProfileByUserId([FromRoute] Guid userId)
         {
-            if (userId == null)
+            if (userId == Guid.Empty)
             {
                 return BadRequest();
             }
