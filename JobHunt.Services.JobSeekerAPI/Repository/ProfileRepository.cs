@@ -43,5 +43,10 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             }
             return null;
         }
+
+        public async Task<User> GetByUserIdAsync(Guid userId)
+        {
+            return await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
     }
 }

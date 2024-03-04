@@ -53,6 +53,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("getByUserId/{userId}")]
+        public async Task<IActionResult> GetProfileByUserId([FromRoute] Guid userId)
+        {
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+            User result = await _profileRepository.GetByUserIdAsync(userId);
+
+            if (result == null)
+            {
+                return Ok(null);
+            }
+
+            UserDto response = _mapper.Map<UserDto>(result);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("addProfile")]
         public async Task<IActionResult> AddProfile(UserDto user)
