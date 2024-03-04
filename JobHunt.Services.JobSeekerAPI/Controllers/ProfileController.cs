@@ -32,7 +32,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
             if(result == null)
             {
-                return NotFound();
+                return Ok(null);
             }
 
             UserDto response = _mapper.Map<UserDto>(result);

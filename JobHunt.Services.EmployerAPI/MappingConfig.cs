@@ -13,6 +13,8 @@ namespace JobHunt.Services.EmployerAPI
                 config.CreateMap<Employer, EmployerDto>().ReverseMap();
                 config.CreateMap<Vacancy, VacancyResponseDto>().ReverseMap();
                 config.CreateMap<Vacancy, VacancyRequestDto>().ReverseMap();
+                config.CreateMap<UserVacancyRequest, UserVacancyRequestDto>().ReverseMap();
+                config.CreateMap<UserVacancyRequest, UserVacancyResponseDto>().ReverseMap();
             });
             return mappingConfig;
         }
