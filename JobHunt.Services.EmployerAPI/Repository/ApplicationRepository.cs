@@ -34,5 +34,10 @@ namespace JobHunt.Services.EmployerAPI.Repository
             var result = await _db.UserVacancyRequests.Where(request => request.VacancyId == vacancyId).Include(u => u.Vacancy).ToListAsync();
             return result;
         }
+
+        public async Task<UserVacancyRequest?> GetDetailAsync(Guid userId, Guid vacancyId)
+        {
+            return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.VacancyId == vacancyId && u.UserId == userId);
+        }
     }
 }

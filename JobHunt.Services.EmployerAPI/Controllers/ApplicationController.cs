@@ -63,6 +63,11 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 return BadRequest();
             }
             UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
+            var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
+            if(existingVacancy != null)
+            {
+                return Ok("Already Applied");
+            }
             var result = await _applicationRepository.CreateAsync(userVacancyRequest);
             var response = _mapper.Map<UserVacancyResponseDto>(result);
             return Ok(response);
