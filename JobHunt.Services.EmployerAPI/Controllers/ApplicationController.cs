@@ -20,6 +20,40 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("getAllByUser/{id}")]
+        public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _applicationRepository.GetAllByUserIdAsync(id);
+            List<UserVacancyResponseDto> response = [];
+            foreach (var application in result)
+            {
+                response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+            }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("getAllByVacancy/{id}")]
+        public async Task<IActionResult> getApplicationsByVacancyId([FromRoute] Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var result = await _applicationRepository.GetAllByVacancyIdAsync(id);
+            List<UserVacancyResponseDto> response = [];
+            foreach (var application in result)
+            {
+                response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+            }
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("createApplication")]
         public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)

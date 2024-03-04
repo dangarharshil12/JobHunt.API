@@ -1,6 +1,8 @@
 ﻿using JobHunt.Services.EmployerAPI.Data;
 using JobHunt.Services.EmployerAPI.Models;
+using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Services.EmployerAPI.Repository
 {
@@ -19,6 +21,18 @@ namespace JobHunt.Services.EmployerAPI.Repository
             await _db.SaveChangesAsync();
 
             return request;
+        }
+
+        public async Task<List<UserVacancyRequest>> GetAllByUserIdAsync(Guid userId)
+        {
+            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
+            return result;
+        }
+
+        public async Task<List<UserVacancyRequest>> GetAllByVacancyIdAsync(Guid vacancyId)
+        {
+            var result = await _db.UserVacancyRequests.Where(request => request.VacancyId == vacancyId).Include(u => u.Vacancy).ToListAsync();
+            return result;
         }
     }
 }
