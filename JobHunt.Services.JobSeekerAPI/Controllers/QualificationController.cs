@@ -13,11 +13,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IQualificationRepository _qualificationRepository;
+        protected ResponseDto _response;
 
         public QualificationController(IQualificationRepository qualificationRepository, IMapper mapper)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
+            _response = new();
         }
 
         [HttpGet]
@@ -27,16 +29,21 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            List<Qualification> result = await _qualificationRepository.GetAllByUserIdAsync(id);
-            List<QualificationResponseDto> response = [];
-
-            foreach(var item in result)
+            else
             {
-                response.Add(_mapper.Map<QualificationResponseDto>(item));
+                List<Qualification> result = await _qualificationRepository.GetAllByUserIdAsync(id);
+                List<QualificationResponseDto> response = [];
+
+                foreach(var item in result)
+                {
+                    response.Add(_mapper.Map<QualificationResponseDto>(item));
+                }
+                _response.Result = response;
             }
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -46,15 +53,24 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            var result = await _qualificationRepository.GetByIdAsync(id);
-            if(result == null)
+            else
             {
-                return Ok(null);
+                var result = await _qualificationRepository.GetByIdAsync(id);
+                if(result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Qualification Not Found";
+                }
+                else
+                {
+                    QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
+                    _response.Result = response;
+                }
             }
-            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -64,14 +80,19 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(request == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
             }
+            else
+            {
+                Qualification Qualification = _mapper.Map<Qualification>(request);
+                var result = await _qualificationRepository.CreateAsync(Qualification);
+                QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
 
-            Qualification Qualification = _mapper.Map<Qualification>(request);
-
-            var result = await _qualificationRepository.CreateAsync(Qualification);
-            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
-            return Ok(response);
+                _response.Result = response;
+                _response.Message = "Qualification Added Successfully";
+            }
+            return Ok(_response);
         }
 
         [HttpPut]
@@ -81,18 +102,28 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if (request == null || id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Request or Id is Empty";
             }
-            Qualification qualification = _mapper.Map<Qualification>(request);
-            qualification.Id = id;
-
-            var result = await _qualificationRepository.UpdateAsync(qualification);
-            if (result != null)
+            else
             {
-                QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
-                return Ok(response);
+                Qualification qualification = _mapper.Map<Qualification>(request);
+                qualification.Id = id;
+
+                var result = await _qualificationRepository.UpdateAsync(qualification);
+                if (result != null)
+                {
+                    QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Qualification Updated Successfully";
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Update Failed";
+                }
             }
-            return NotFound();
+            return Ok(_response);
         }
 
         [HttpDelete]
@@ -102,16 +133,26 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            Qualification qualification = await _qualificationRepository.GetByIdAsync(id);
-            if(qualification == null)
+            else
             {
-                return NotFound();
+                Qualification qualification = await _qualificationRepository.GetByIdAsync(id);
+                if(qualification == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Qualification Not Found";
+                }
+                else
+                {
+                    var result = await _qualificationRepository.DeleteAsync(qualification);
+                    QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Qualification Deleted Successfully";
+                }
             }
-            var result = await _qualificationRepository.DeleteAsync(qualification);
-            QualificationResponseDto response = _mapper.Map<QualificationResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
     }
 }

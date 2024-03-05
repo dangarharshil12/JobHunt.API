@@ -13,11 +13,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IProfileRepository _profileRepository;
+        protected ResponseDto _response;
 
         public ProfileController(IMapper mapper, IProfileRepository profileRepository)
         {
             _mapper = mapper;
             _profileRepository = profileRepository;
+            _response = new();
         }
 
         [HttpGet]
@@ -31,8 +33,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             {
                 response.Add(_mapper.Map<UserDto>(user));
             }
-
-            return Ok(response);
+            _response.Result = response;
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -42,17 +44,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            User result = await _profileRepository.GetByEmailAsync(email);
-
-            if(result == null)
+            else
             {
-                return Ok(null);
-            }
+                User result = await _profileRepository.GetByEmailAsync(email);
 
-            UserDto response = _mapper.Map<UserDto>(result);
-            return Ok(response);
+                if(result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Profile not found";
+                }
+                else
+                {
+                    UserDto response = _mapper.Map<UserDto>(result);
+                    _response.Result = response;
+                }
+            }
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -62,17 +72,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if (userId == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "UserId is Empty";
             }
-            User result = await _profileRepository.GetByUserIdAsync(userId);
-
-            if (result == null)
+            else
             {
-                return Ok(null);
-            }
+                User result = await _profileRepository.GetByUserIdAsync(userId);
 
-            UserDto response = _mapper.Map<UserDto>(result);
-            return Ok(response);
+                if (result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Profile not found";
+                }
+                else
+                {
+                    UserDto response = _mapper.Map<UserDto>(result);
+                    _response.Result = response;
+                }
+            }
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -82,15 +100,19 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(user == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "User is Empty";
             }
+            else
+            {
+                User request = _mapper.Map<User>(user);
+                var result = await _profileRepository.CreateAsync(request);
+                UserDto response = _mapper.Map<UserDto>(result);
 
-            User request = _mapper.Map<User>(user);
-
-            var result = await _profileRepository.CreateAsync(request);
-            UserDto response = _mapper.Map<UserDto>(result);
-
-            return Ok(response);
+                _response.Result = response;
+                _response.Message = "User Profile Added Successfully";
+            }
+            return Ok(_response);
         }
 
         [HttpPut]
@@ -100,18 +122,27 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(user == null || email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "User or Email is Empty";
             }
-
-            User request = _mapper.Map<User>(user);
-
-            var result = await _profileRepository.UpdateAsync(request);
-            if(result != null)
+            else
             {
-                UserDto response = _mapper.Map<UserDto>(result);
-                return Ok(response);
+                User request = _mapper.Map<User>(user);
+
+                var result = await _profileRepository.UpdateAsync(request);
+                if(result != null)
+                {
+                    UserDto response = _mapper.Map<UserDto>(result);
+                    _response.Result = response;
+                    _response.Message = "User Profile Added Successfully";
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = " User Profile Update Failed";
+                }
             }
-            return NotFound();
+            return Ok(_response);
         }
     }
 }

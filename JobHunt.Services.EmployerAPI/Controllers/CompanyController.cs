@@ -14,11 +14,13 @@ namespace JobHunt.Services.EmployerAPI.Controllers
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
+        protected ResponseDto _response;
 
         public CompanyController(ICompanyRepository companyRepository, IMapper mapper)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
+            _response = new();
         }
 
         [HttpGet]
@@ -27,16 +29,25 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if(email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            var result = await _companyRepository.GetByEmailAsync(email);
-            if (result == null)
+            else
             {
-                return Ok(null);
+                var result = await _companyRepository.GetByEmailAsync(email);
+                if (result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Organization Information Not Found";
+                }
+                else
+                {
+                    var response = _mapper.Map<EmployerDto>(result);
+                    _response.Result = response;
+                }
             }
 
-            var response = _mapper.Map<EmployerDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -45,16 +56,24 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if (name == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Organization Name is Empty";
             }
-            var result = await _companyRepository.GetByNameAsync(name);
-            if (result == null)
+            else
             {
-                return Ok(null);
+                var result = await _companyRepository.GetByNameAsync(name);
+                if (result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Organization Information Not Found";
+                }
+                else
+                {
+                    var response = _mapper.Map<EmployerDto>(result);
+                    _response.Result= response;
+                }
             }
-
-            var response = _mapper.Map<EmployerDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -64,20 +83,27 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if(request == null)
             {
-                return BadRequest(request);
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
             }
-
-            var existingCompany = await _companyRepository.GetByNameAsync(request.Organization);
-            if (existingCompany != null)
+            else
             {
-                return BadRequest();
+                var existingCompany = await _companyRepository.GetByNameAsync(request.Organization);
+                if (existingCompany != null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Organization Information Not Found";
+                }
+                else
+                {
+                    Employer employer = _mapper.Map<Employer>(request);
+                    var result = await _companyRepository.CreateAsync(employer);
+                    EmployerDto response = _mapper.Map<EmployerDto>(result);
+                    _response.Message = "Organization Information Created Successfully!";
+                    _response.Result= response;
+                }
             }
-
-            Employer employer = _mapper.Map<Employer>(request);
-            var result = await _companyRepository.CreateAsync(employer);
-            EmployerDto response = _mapper.Map<EmployerDto>(result);
-
-            return Ok(result);
+            return Ok(_response);
         }
 
         [HttpPut]
@@ -87,23 +113,37 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if (email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            var result = await _companyRepository.GetByEmailAsync(email);
-            if (result == null)
+            else
             {
-                return NotFound(null);
-            }
-            Employer employer = _mapper.Map<Employer>(request);
-            employer.Id = result.Id;
+                var result = await _companyRepository.GetByEmailAsync(email);
+                if (result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Organization information not found";
+                }
+                else
+                {
+                    Employer employer = _mapper.Map<Employer>(request);
+                    employer.Id = result.Id;
 
-            result = await _companyRepository.UpdateAsync(employer);
-            if(result == null)
-            {
-                return BadRequest();
+                    result = await _companyRepository.UpdateAsync(employer);
+                    if(result == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Update Failed";
+                    }
+                    else
+                    {
+                        EmployerDto response = _mapper.Map<EmployerDto>(result);
+                        _response.Message = "Organization Information Updated Successfully";
+                        _response.Result = response;
+                    }
+                }
             }
-            EmployerDto response = _mapper.Map<EmployerDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
     }
 }

@@ -15,12 +15,14 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ICompanyRepository _companyRepository;
         private readonly IVacancyRepository _vacancyRepository;
+        protected ResponseDto _response;
 
         public VacancyController(IMapper mapper, IVacancyRepository vacancyRepository, ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _vacancyRepository = vacancyRepository;
             _companyRepository = companyRepository;
+            _response = new();
         }
 
         [HttpGet]
@@ -33,8 +35,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 response.Add(_mapper.Map<VacancyResponseDto>(vacancy));
             }
-
-            return Ok(response);
+            _response.Result = response;
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -43,12 +45,17 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            var result = await _vacancyRepository.GetByIdAsync(id);
-            var response = _mapper.Map<VacancyResponseDto>(result);
+            else
+            {
+                var result = await _vacancyRepository.GetByIdAsync(id);
+                var response = _mapper.Map<VacancyResponseDto>(result);
+                _response.Result = response;
+            }
 
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -57,25 +64,34 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if (email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            var employerDetails = await _companyRepository.GetByEmailAsync(email);
-
-            if(employerDetails == null)
+            else
             {
-                return Ok(null);
-            }
-            var organizationName = employerDetails.Organization;
+                var employerDetails = await _companyRepository.GetByEmailAsync(email);
+
+                if(employerDetails == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Employer Details Not Found is Empty";
+                }
+                else
+                {
+                    var organizationName = employerDetails.Organization;
             
-            var result = await _vacancyRepository.GetByNameAsync(organizationName);
-            List<VacancyResponseDto> vacancies = [];
+                    var result = await _vacancyRepository.GetByNameAsync(organizationName);
+                    List<VacancyResponseDto> vacancies = [];
 
-            foreach(var item in result)
-            {
-                vacancies.Add(_mapper.Map<VacancyResponseDto>(item));
+                    foreach(var item in result)
+                    {
+                        vacancies.Add(_mapper.Map<VacancyResponseDto>(item));
+                    }
+                    _response.Result = vacancies;
+                }
             }
 
-            return Ok(vacancies);
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -86,21 +102,29 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             string email = request.PublishedBy;
             if(email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            var employerDetails = await _companyRepository.GetByEmailAsync(email);
-            request.PublishedBy = employerDetails.Organization;
-
-            if(request == null)
+            else
             {
-                return BadRequest();
+                var employerDetails = await _companyRepository.GetByEmailAsync(email);
+                request.PublishedBy = employerDetails.Organization;
+
+                if(request == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Request is Empty";
+                }
+                else
+                {
+                    Vacancy vacancy = _mapper.Map<Vacancy>(request);
+                    var result = await _vacancyRepository.CreateAsync(vacancy);
+                    var response = _mapper.Map<VacancyResponseDto>(result);
+                    _response.Result = vacancy;
+                    _response.Message = "Vacancy Created Successfully";
+                }
             }
-
-            Vacancy vacancy = _mapper.Map<Vacancy>(request);
-            var result = await _vacancyRepository.CreateAsync(vacancy);
-            var response = _mapper.Map<VacancyResponseDto>(result);
-
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpPut]
@@ -111,20 +135,30 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             string email = vacancyDto.PublishedBy;
             if (email == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Email is Empty";
             }
-            var employerDetails = await _companyRepository.GetByEmailAsync(email);
-            vacancyDto.PublishedBy = employerDetails.Organization;
-            if (vacancyDto == null)
+            else
             {
-                return BadRequest();
-            }
-            Vacancy request = _mapper.Map<Vacancy>(vacancyDto);
-            request.Id = id;
-            var result = await _vacancyRepository.UpdateAsync(request);
+                var employerDetails = await _companyRepository.GetByEmailAsync(email);
+                vacancyDto.PublishedBy = employerDetails.Organization;
+                if (vacancyDto == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Vacancy Details are Empty";
+                }
+                else
+                {
+                    Vacancy request = _mapper.Map<Vacancy>(vacancyDto);
+                    request.Id = id;
+                    var result = await _vacancyRepository.UpdateAsync(request);
 
-            VacancyResponseDto response = _mapper.Map<VacancyResponseDto>(result);
-            return Ok(response);
+                    VacancyResponseDto response = _mapper.Map<VacancyResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Vacnacy Updated Successfully";
+                }
+            }
+            return Ok(_response);
         }
 
         [HttpDelete]
@@ -134,19 +168,26 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-
-            Vacancy vacancy = await _vacancyRepository.GetByIdAsync(id);
-            if(vacancy == null)
+            else
             {
-                return BadRequest();
+                Vacancy vacancy = await _vacancyRepository.GetByIdAsync(id);
+                if(vacancy == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Vacancy Not Found";
+                }
+                else
+                {
+                    var result = await _vacancyRepository.DeleteAsync(vacancy);
+                    var response = _mapper.Map<VacancyResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Vacancy Deleted Successfully";
+                }
             }
-
-            var result = await _vacancyRepository.DeleteAsync(vacancy);
-            var response = _mapper.Map<VacancyResponseDto>(result);
-
-            return Ok(response);
+            return Ok(_response);
         }
     }
 }

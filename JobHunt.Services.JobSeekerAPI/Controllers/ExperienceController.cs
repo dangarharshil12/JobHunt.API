@@ -13,10 +13,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IExperienceRepository _experienceRepository;
+        protected ResponseDto _response;
+
         public ExperienceController(IMapper mapper, IExperienceRepository experienceRepository)
         {
             _mapper = mapper;
             _experienceRepository = experienceRepository;
+            _response = new();
         }
 
         [HttpGet]
@@ -26,16 +29,21 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(userId == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "UserId is Empty";
             }
-            List<UserExperience> result = await _experienceRepository.GetAllByUserIdAsync(userId);
-            List<UserExperienceResponseDto> response = [];
-
-            foreach(var item in result)
+            else
             {
-                response.Add(_mapper.Map<UserExperienceResponseDto>(item));
+                List<UserExperience> result = await _experienceRepository.GetAllByUserIdAsync(userId);
+                List<UserExperienceResponseDto> response = [];
+
+                foreach(var item in result)
+                {
+                    response.Add(_mapper.Map<UserExperienceResponseDto>(item));
+                }
+                _response.Result = response;
             }
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -45,16 +53,25 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            var result = await _experienceRepository.GetByIdAsync(id);
-
-            if(result == null)
+            else
             {
-                return NotFound();
+                var result = await _experienceRepository.GetByIdAsync(id);
+
+                if(result == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "No Experiences Found";
+                }
+                else
+                {
+                    var response = _mapper.Map<UserExperienceResponseDto>(result);
+                    _response.Result = response;
+                }
             }
-            var response = _mapper.Map<UserExperienceResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -64,13 +81,19 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(request == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
             }
-            UserExperience experience = _mapper.Map<UserExperience>(request);
-            var result = await _experienceRepository.CreateAsync(experience);
+            else
+            {
+                UserExperience experience = _mapper.Map<UserExperience>(request);
+                var result = await _experienceRepository.CreateAsync(experience);
 
-            var response = _mapper.Map<UserExperienceResponseDto>(result);
-            return Ok(response);
+                var response = _mapper.Map<UserExperienceResponseDto>(result);
+                _response.Result = response;
+                _response.Message = "Experience Added Successfully";
+            }
+            return Ok(_response);
         }
 
         [HttpPut]
@@ -80,18 +103,28 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty || request == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id or Request is Empty";
             }
-            UserExperience experience = _mapper.Map<UserExperience>(request);
-            experience.Id = id;
-
-            var result = await _experienceRepository.UpdateAsync(experience);
-            if (result != null)
+            else
             {
-                UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
-                return Ok(response);
+                UserExperience experience = _mapper.Map<UserExperience>(request);
+                experience.Id = id;
+
+                var result = await _experienceRepository.UpdateAsync(experience);
+                if (result != null)
+                {
+                    UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Experience Updated Successfully";
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Not Found";
+                }
             }
-            return NotFound();
+            return Ok(_response);
         }
 
         [HttpDelete]
@@ -101,16 +134,26 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            UserExperience experience = await _experienceRepository.GetByIdAsync(id);
-            if(experience == null)
+            else
             {
-                return NotFound();
+                UserExperience experience = await _experienceRepository.GetByIdAsync(id);
+                if(experience == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Experience Not Found";
+                }
+                else
+                {
+                    var result = await _experienceRepository.DeleteAsync(experience);
+                    UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Experience Deleted Successfully";
+                }
             }
-            var result = await _experienceRepository.DeleteAsync(experience);
-            UserExperienceResponseDto response = _mapper.Map<UserExperienceResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
     }
 }

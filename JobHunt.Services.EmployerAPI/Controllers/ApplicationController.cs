@@ -14,12 +14,14 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         private readonly IApplicationRepository _applicationRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IMapper _mapper;
+        protected ResponseDto _response;
 
         public ApplicationController(IApplicationRepository applicationRepository, IMapper mapper, IProfileRepository profileRepository)
         {
             _profileRepository = profileRepository;
             _applicationRepository = applicationRepository;
             _mapper = mapper;
+            _response = new();
         }
 
         [HttpGet]
@@ -29,15 +31,20 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if(id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            var result = await _applicationRepository.GetAllByUserIdAsync(id);
-            List<UserVacancyResponseDto> response = [];
-            foreach (var application in result)
+            else
             {
-                response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+                var result = await _applicationRepository.GetAllByUserIdAsync(id);
+                List<UserVacancyResponseDto> response = [];
+                foreach (var application in result)
+                {
+                    response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+                }
+                _response.Result = response;
             }
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -47,23 +54,28 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if (id == Guid.Empty)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Id is Empty";
             }
-            List<UserVacancyRequest> result = await _applicationRepository.GetAllByVacancyIdAsync(id);
-
-            List<UserVacancyResponseDto> response = [];
-            foreach (var application in result)
+            else
             {
-                response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+                List<UserVacancyRequest> result = await _applicationRepository.GetAllByVacancyIdAsync(id);
+
+                List<UserVacancyResponseDto> response = [];
+                foreach (var application in result)
+                {
+                    response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+                }
+
+                List<UserDto> users = await _profileRepository.GetUsers();
+                foreach(var item in response)
+                {
+                    item.User = users.FirstOrDefault(u => u.Id == item.UserId);
+                }
+                _response.Result = response;
             }
 
-            List<UserDto> users = await _profileRepository.GetUsers();
-            foreach(var item in response)
-            {
-                item.User = users.FirstOrDefault(u => u.Id == item.UserId);
-            }
-
-            return Ok(response);
+            return Ok(_response);
         }
 
         [HttpPost]
@@ -73,17 +85,27 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         {
             if (request == null)
             {
-                return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
             }
-            UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
-            var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
-            if(existingVacancy != null)
+            else
             {
-                return Ok(null);
+                UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
+                var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
+                if(existingVacancy == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Vacancy don't exist";
+                }
+                else
+                {
+                    var result = await _applicationRepository.CreateAsync(userVacancyRequest);
+                    var response = _mapper.Map<UserVacancyResponseDto>(result);
+                    _response.Result = response;
+                    _response.Message = "Applied Successfully";
+                }
             }
-            var result = await _applicationRepository.CreateAsync(userVacancyRequest);
-            var response = _mapper.Map<UserVacancyResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
     }
 }
