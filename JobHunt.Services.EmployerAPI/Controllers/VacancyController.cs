@@ -3,6 +3,7 @@ using Azure.Core;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
@@ -78,6 +79,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employer")]
         [Route("addVacancy")]
         public async Task<IActionResult> AddVacancy([FromBody] VacancyRequestDto request)
         {
@@ -102,6 +104,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Employer")]
         [Route("updateVacancy/{id}")]
         public async Task<IActionResult> UpdateVacancy([FromBody] VacancyRequestDto vacancyDto, [FromRoute] Guid id)
         {
@@ -125,6 +128,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Employer")]
         [Route("deleteVacancy/{id}")]
         public async Task<IActionResult> DeleteVacancy(Guid id)
         {

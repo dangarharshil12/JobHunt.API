@@ -2,6 +2,7 @@
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
@@ -65,6 +66,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPost]
         [Route("createApplication")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
         {
             if (request == null)
