@@ -67,6 +67,12 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 return BadRequest(request);
             }
 
+            var existingCompany = await _companyRepository.GetByNameAsync(request.Organization);
+            if (existingCompany != null)
+            {
+                return BadRequest();
+            }
+
             Employer employer = _mapper.Map<Employer>(request);
             var result = await _companyRepository.CreateAsync(employer);
             EmployerDto response = _mapper.Map<EmployerDto>(result);

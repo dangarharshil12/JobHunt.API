@@ -24,6 +24,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getAllByUser/{id}")]
+        [Authorize]
         public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
         {
             if(id == Guid.Empty)
@@ -41,6 +42,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getAllByVacancy/{id}")]
+        [Authorize]
         public async Task<IActionResult> getApplicationsByVacancyId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
