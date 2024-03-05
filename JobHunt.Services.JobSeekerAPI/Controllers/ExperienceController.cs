@@ -2,6 +2,7 @@
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
@@ -20,6 +21,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpGet]
         [Route("getAllExperiencesByUserId/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetAllExperiencesByUserId(Guid userId)
         {
             if(userId == Guid.Empty)
@@ -38,6 +40,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpGet]
         [Route("getExperienceById/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetExperienceById(Guid id)
         {
             if(id == Guid.Empty)
@@ -56,6 +59,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPost]
         [Route("addExperience")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> AddExperience([FromBody] UserExperienceRequestDto request)
         {
             if(request == null)
@@ -71,6 +75,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPut]
         [Route("updateExperience/{id}")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> UpdateExperience([FromBody] UserExperienceRequestDto request, [FromRoute] Guid id)
         {
             if(id == Guid.Empty || request == null)
@@ -91,6 +96,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpDelete]
         [Route("deleteExperience/{id}")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> DeleteExperience([FromRoute] Guid id)
         {
             if(id == Guid.Empty)

@@ -2,6 +2,7 @@
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
@@ -21,6 +22,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpGet]
         [Route("getUsers")]
+        [Authorize]
         public async Task<IActionResult> GetUsers()
         {
             List<User> users = await _profileRepository.GetUsersAsync();
@@ -35,6 +37,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpGet]
         [Route("getByEmail/{email}")]
+        [Authorize]
         public async Task<IActionResult> GetProfileByEmail([FromRoute] string email) 
         {
             if(email == null)
@@ -54,6 +57,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpGet]
         [Route("getByUserId/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetProfileByUserId([FromRoute] Guid userId)
         {
             if (userId == Guid.Empty)
@@ -73,6 +77,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPost]
         [Route("addProfile")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> AddProfile(UserDto user)
         {
             if(user == null)
@@ -90,6 +95,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPut]
         [Route("updateProfile/{email}")]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserDto user, [FromRoute] string email)
         {
             if(user == null || email == null)

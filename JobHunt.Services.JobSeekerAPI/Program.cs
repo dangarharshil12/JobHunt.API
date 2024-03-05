@@ -3,7 +3,10 @@ using JobHunt.Services.JobSeekerAPI;
 using JobHunt.Services.JobSeekerAPI.Data;
 using JobHunt.Services.JobSeekerAPI.Repository;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using JobHunt.Services.JobSeekerAPI.Utility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,35 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IQualificationRepository, QualificationRepository>();
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
 
+// Authorization for API
+builder.Services.AddSwaggerGen(option =>
+{
+    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference= new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id=JwtBearerDefaults.AuthenticationScheme
+                }
+            }, new string[]{}
+        }
+    });
+});
+
+// jwt authentication configuration
+builder.AddAppAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,6 +81,7 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
+app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();
