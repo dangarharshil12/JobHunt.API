@@ -62,12 +62,15 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 List<UserVacancyRequest> result = await _applicationRepository.GetAllByVacancyIdAsync(id);
 
                 List<UserVacancyResponseDto> response = [];
+                List<Guid> usersList = [];
+
                 foreach (var application in result)
                 {
+                    usersList.Add(application.UserId);
                     response.Add(_mapper.Map<UserVacancyResponseDto>(application));
                 }
 
-                List<UserDto> users = await _profileRepository.GetUsers();
+                List<UserDto> users = await _profileRepository.GetUsers(usersList);
                 foreach(var item in response)
                 {
                     item.User = users.FirstOrDefault(u => u.Id == item.UserId);

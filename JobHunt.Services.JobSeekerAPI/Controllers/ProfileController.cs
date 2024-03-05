@@ -22,19 +22,18 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _response = new();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getUsers")]
         [Authorize]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromBody] List<Guid> userList)
         {
-            List<User> users = await _profileRepository.GetUsersAsync();
+            List<User> users = await _profileRepository.GetUsersAsync(userList);
             var response = new List<UserDto>();
             foreach (var user in users)
             {
                 response.Add(_mapper.Map<UserDto>(user));
             }
-            _response.Result = response;
-            return Ok(_response);
+            return Ok(response);
         }
 
         [HttpGet]

@@ -13,9 +13,9 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<List<User>> GetUsersAsync(List<Guid> users)
         {
-            return await _db.Users.ToListAsync();
+            return await _db.Users.Where(u => users.Contains(u.Id)).ToListAsync();
         }
 
         public async Task<User> GetByEmailAsync(string email)

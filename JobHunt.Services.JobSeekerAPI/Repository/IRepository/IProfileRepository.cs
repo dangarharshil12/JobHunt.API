@@ -6,7 +6,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository.IRepository
     {
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByUserIdAsync(Guid userId);
-        Task<List<User>> GetUsersAsync();
+        Task<List<User>> GetUsersAsync(List<Guid> userList);
         Task<User> CreateAsync(User user);
         Task<User?> UpdateAsync(User user);
     }

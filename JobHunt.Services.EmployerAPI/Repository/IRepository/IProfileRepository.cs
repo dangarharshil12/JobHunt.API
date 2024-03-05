@@ -4,6 +4,6 @@ namespace JobHunt.Services.EmployerAPI.Repository.IRepository
 {
     public interface IProfileRepository
     {
-        Task<List<UserDto>> GetUsers();
+        Task<List<UserDto>> GetUsers(List<Guid> users);
     }
 }
