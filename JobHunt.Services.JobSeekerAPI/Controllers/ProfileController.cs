@@ -13,12 +13,14 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IProfileRepository _profileRepository;
+        private readonly IResumeRepository _resumeRepository;
         protected ResponseDto _response;
 
-        public ProfileController(IMapper mapper, IProfileRepository profileRepository)
+        public ProfileController(IMapper mapper, IProfileRepository profileRepository, IResumeRepository resumeRepository)
         {
             _mapper = mapper;
             _profileRepository = profileRepository;
+            _resumeRepository = resumeRepository;
             _response = new();
         }
 
@@ -114,6 +116,33 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPost]
+        [Route("uploadResume")]
+        [Authorize(Roles = "JobSeeker")]
+        public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName, [FromForm] string title)
+        {
+            ValidateFileUpload(file);
+
+            if (ModelState.IsValid)
+            {
+                var resume = new ResumeDto
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName,
+                    Title = title,
+                };
+
+                resume = await _resumeRepository.Upload(file, resume);
+                _response.Result = resume.Url;
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Resume Upload Model is not Valid";
+            }
+            return Ok(_response);
+        }
+
         [HttpPut]
         [Route("updateProfile/{email}")]
         [Authorize(Roles = "JobSeeker")]
@@ -142,6 +171,21 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 }
             }
             return Ok(_response);
+        }
+
+        private void ValidateFileUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".pdf", ".doc" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 5 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 5MB");
+            }
         }
     }
 }

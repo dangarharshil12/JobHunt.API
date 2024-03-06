@@ -10,6 +10,7 @@
         public string Address { get; set; }
         public double TotalExperience { get; set; }
         public double ExpectedSalary { get; set; }
+        public string ResumeUrl { get; set; }
         public DateTime DateOfBirth { get; set; }
     }
 }
