@@ -161,7 +161,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 {
                     UserDto response = _mapper.Map<UserDto>(result);
                     _response.Result = response;
-                    _response.Message = "User Profile Added Successfully";
+                    _response.Message = "User Profile Updated Successfully";
                 }
                 else
                 {

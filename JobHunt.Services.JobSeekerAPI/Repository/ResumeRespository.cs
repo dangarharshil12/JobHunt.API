@@ -21,6 +21,11 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
         public async Task<ResumeDto> Upload(IFormFile file, ResumeDto resume)
         {
             var localPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Resumes", $"{resume.FileName}{resume.FileExtension}");
+            FileInfo oldFile = new FileInfo(localPath);
+            if (oldFile.Exists)
+            {
+                oldFile.Delete();
+            }
 
             using var stream = new FileStream(localPath, FileMode.Create);
             await file.CopyToAsync(stream);
