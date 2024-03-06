@@ -95,10 +95,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
                 var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
-                if(existingVacancy == null)
+                if(existingVacancy != null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Vacancy don't exist";
+                    _response.Message = "You have Already Applied";
                 }
                 else
                 {
