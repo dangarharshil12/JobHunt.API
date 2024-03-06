@@ -108,20 +108,28 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             else
             {
                 var employerDetails = await _companyRepository.GetByEmailAsync(email);
-                request.PublishedBy = employerDetails.Organization;
-
-                if(request == null)
+                if(employerDetails == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Request is Empty";
+                    _response.Message = "Please Enter Company Information";
                 }
                 else
                 {
-                    Vacancy vacancy = _mapper.Map<Vacancy>(request);
-                    var result = await _vacancyRepository.CreateAsync(vacancy);
-                    var response = _mapper.Map<VacancyResponseDto>(result);
-                    _response.Result = vacancy;
-                    _response.Message = "Vacancy Created Successfully";
+                    request.PublishedBy = employerDetails.Organization;
+
+                    if(request == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Request is Empty";
+                    }
+                    else
+                    {
+                        Vacancy vacancy = _mapper.Map<Vacancy>(request);
+                        var result = await _vacancyRepository.CreateAsync(vacancy);
+                        var response = _mapper.Map<VacancyResponseDto>(result);
+                        _response.Result = vacancy;
+                        _response.Message = "Vacancy Created Successfully";
+                    }
                 }
             }
             return Ok(_response);
