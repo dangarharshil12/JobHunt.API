@@ -119,7 +119,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpPost]
         [Route("uploadResume")]
         [Authorize(Roles = "JobSeeker")]
-        public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName, [FromForm] string title)
+        public async Task<IActionResult> UploadResume([FromForm] IFormFile file)
         {
             ValidateFileUpload(file);
 
@@ -128,8 +128,6 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 var resume = new ResumeDto
                 {
                     FileExtension = Path.GetExtension(file.FileName).ToLower(),
-                    FileName = fileName,
-                    Title = title,
                 };
 
                 resume = await _resumeRepository.Upload(file, resume);
