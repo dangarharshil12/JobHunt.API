@@ -26,21 +26,41 @@ namespace JobHunt.Services.AuthAPI.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
-            var user = new ApplicationUser
+            var existingUser = await _userManager.FindByEmailAsync(request.Email);
+            if(existingUser != null)
             {
-                FullName = request.FirstName + " " + request.LastName,
-                UserName = request.Email?.Trim(),
-                Email = request.Email?.Trim(),
-                PhoneNumber = request.PhoneNumber?.Trim(),
-            };
+                _response.IsSuccess = false;
+                _response.Message = "User with this email already exist. Please Login";
+            }
+            else
+            {
+                var user = new ApplicationUser
+                {
+                    FullName = request.FirstName + " " + request.LastName,
+                    UserName = request.Email?.Trim(),
+                    Email = request.Email?.Trim(),
+                    PhoneNumber = request.PhoneNumber?.Trim(),
+                };
 
-            var identityResult = await _userManager.CreateAsync(user, request.Password);
-            if (identityResult.Succeeded)
-            {
-                identityResult = await _userManager.AddToRoleAsync(user, request.Role);
+                var identityResult = await _userManager.CreateAsync(user, request.Password);
                 if (identityResult.Succeeded)
                 {
-                    _response.Message = "User Registration Successful";
+                    identityResult = await _userManager.AddToRoleAsync(user, request.Role);
+                    if (identityResult.Succeeded)
+                    {
+                        _response.Message = "User Registration Successful";
+                    }
+                    else
+                    {
+                        if (identityResult.Errors.Any())
+                        {
+                            foreach (var error in identityResult.Errors)
+                            {
+                                _response.Message = error.Description;
+                            }
+                            _response.IsSuccess = false;
+                        }
+                    }
                 }
                 else
                 {
@@ -48,23 +68,10 @@ namespace JobHunt.Services.AuthAPI.Controllers
                     {
                         foreach (var error in identityResult.Errors)
                         {
-                            ModelState.AddModelError("", error.Description);
+                            _response.Message = error.Description;
                         }
                         _response.IsSuccess = false;
-                        _response.Result = ModelState;
                     }
-                }
-            }
-            else
-            {
-                if (identityResult.Errors.Any())
-                {
-                    foreach (var error in identityResult.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                    _response.IsSuccess = false;
-                    _response.Result = ModelState;
                 }
             }
             return Ok(_response);
