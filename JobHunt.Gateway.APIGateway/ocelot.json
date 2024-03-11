@@ -180,6 +180,233 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
+    },
+
+    // JobSeeker API
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/getByEmail/{email}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/getByEmail/{email}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/getByUserId/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/getByUserId/{userId}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/addProfile",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/addProfile",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/uploadResume",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/uploadResume",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/updateProfile/{email}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/updateProfile/{email}",
+      "UpstreamhttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/experience/getAllExperiencesByUserId/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/experience/getAllExperiencesByUserId/{userId}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/experience/getExperienceById/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/experience/getExperienceById/{id}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/experience/addExperience",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/experience/addExperience",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/experience/updateExperience/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/experience/updateExperience/{id}",
+      "UpstreamhttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/experience/deleteExperience/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/experience/deleteExperience/{id}",
+      "UpstreamhttpMethod": [ "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/qualification/GetAllQualificationsByUserId/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/qualification/GetAllQualificationsByUserId/{id}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/qualification/GetQualificationById/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/qualification/GetQualificationById/{id}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/qualification/addQualification",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/qualification/addQualification",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/qualification/updateQualification/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/qualification/updateQualification/{id}",
+      "UpstreamhttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/qualification/deleteQualification/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/qualification/deleteQualification/{id}",
+      "UpstreamhttpMethod": [ "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ],
   "GlobalConfiguration": {
