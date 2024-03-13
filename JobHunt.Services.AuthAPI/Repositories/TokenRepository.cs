@@ -21,7 +21,8 @@ namespace JobHunt.Services.AuthAPI.Repositories
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.FullName)
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim("Id", user.Id)
             };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

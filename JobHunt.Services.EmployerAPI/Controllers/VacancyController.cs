@@ -5,6 +5,7 @@ using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
 {
@@ -43,7 +44,15 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Route("getVacancyById/{id}")]
         public async Task<IActionResult> GetVacancyById([FromRoute] Guid id)
         {
-            if(id == Guid.Empty)
+            bool isApplied = false;
+            var user = User as ClaimsPrincipal;
+            string userId = user.Claims.Where(c => c.Type == "Id").Select(x => x.Value).FirstOrDefault();
+            if(userId != null)
+            {
+                isApplied = await _vacancyRepository.CheckApplicationAsync(new Guid(userId), id);
+            }
+
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -52,6 +61,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 var result = await _vacancyRepository.GetByIdAsync(id);
                 var response = _mapper.Map<VacancyResponseDto>(result);
+                response.Applied = isApplied;
                 _response.Result = response;
             }
 
