@@ -102,10 +102,50 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 }
                 else
                 {
+                    userVacancyRequest.ApplicationStatus = "SUBMITTED";
                     var result = await _applicationRepository.CreateAsync(userVacancyRequest);
                     var response = _mapper.Map<UserVacancyResponseDto>(result);
                     _response.Result = response;
                     _response.Message = "Applied Successfully";
+                }
+            }
+            return Ok(_response);
+        }
+
+        [HttpPost]
+        [Route("processApplication")]
+        [Authorize(Roles = "Employer")]
+        public async Task<IActionResult> processApplication([FromBody] statusChangeRequestDto request)
+        {
+            string status = request.status;
+            var application = await _applicationRepository.GetDetailByIdAsync(request.id);
+
+            if(application == null) 
+            { 
+                _response.IsSuccess = false;
+                _response.Message = "Job Application Not Found";
+            }
+            else
+            {
+                if(status == "")
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "New Status is not Provided.";
+                }
+                else
+                {
+                    application.ApplicationStatus = status;
+                    var result = await _applicationRepository.UpdateAsync(application);
+                    if(result != null)
+                    {
+                        _response.Result = _mapper.Map<UserVacancyResponseDto>(result);
+                        _response.Message = "Status Updated Successfully";
+                    }
+                    else
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Status Update Failed";
+                    }
                 }
             }
             return Ok(_response);

@@ -39,5 +39,23 @@ namespace JobHunt.Services.EmployerAPI.Repository
         {
             return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.VacancyId == vacancyId && u.UserId == userId);
         }
+
+        public async Task<UserVacancyRequest?> GetDetailByIdAsync(Guid id)
+        {
+            return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<UserVacancyRequest?> UpdateAsync(UserVacancyRequest request)
+        {
+            var existingApplication = await _db.UserVacancyRequests.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if (existingApplication != null)
+            {
+                _db.Entry(existingApplication).CurrentValues.SetValues(request);
+                await _db.SaveChangesAsync();
+                return request;
+            }
+            return null;
+        }
     }
 }

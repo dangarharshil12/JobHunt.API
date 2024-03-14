@@ -15,5 +15,6 @@ namespace JobHunt.Services.EmployerAPI.Models
         [NotMapped]
         public UserDto? User { get; set; }
         public DateTime AppliedDate { get; set; }
+        public string ApplicationStatus { get; set; }
     }
 }
