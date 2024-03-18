@@ -16,5 +16,6 @@ namespace JobHunt.Services.EmployerAPI.Models
         public UserDto? User { get; set; }
         public DateTime AppliedDate { get; set; }
         public string ApplicationStatus { get; set; }
+        public int? TotalRecords { get; set; } = 0;
     }
 }

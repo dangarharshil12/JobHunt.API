@@ -3,6 +3,7 @@ using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace JobHunt.Services.EmployerAPI.Repository
 {
@@ -43,6 +44,18 @@ namespace JobHunt.Services.EmployerAPI.Repository
         public async Task<UserVacancyRequest?> GetDetailByIdAsync(Guid id)
         {
             return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<List<UserVacancyRequest>> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request)
+        {
+            var result = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();
+            List<UserVacancyRequest> response = result;
+            foreach (var item in response)
+            {
+                item.Vacancy = await _db.VacancyDetails.FirstOrDefaultAsync(u => u.Id == item.VacancyId);
+            }
+
+            return response;
         }
 
         public async Task<UserVacancyRequest?> UpdateAsync(UserVacancyRequest request)

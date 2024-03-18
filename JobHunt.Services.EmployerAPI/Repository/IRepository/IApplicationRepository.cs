@@ -1,4 +1,5 @@
 ﻿using JobHunt.Services.EmployerAPI.Models;
+using JobHunt.Services.EmployerAPI.Models.Dto;
 
 namespace JobHunt.Services.EmployerAPI.Repository.IRepository
 {
@@ -10,5 +11,6 @@ namespace JobHunt.Services.EmployerAPI.Repository.IRepository
         Task<List<UserVacancyRequest>> GetAllByVacancyIdAsync(Guid vacancyId);
         Task<UserVacancyRequest> CreateAsync(UserVacancyRequest request);
         Task<UserVacancyRequest?> UpdateAsync(UserVacancyRequest request);
+        Task<List<UserVacancyRequest>> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request);
     }
 }

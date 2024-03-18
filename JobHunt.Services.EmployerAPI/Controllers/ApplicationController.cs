@@ -71,7 +71,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 }
 
                 List<UserDto> users = await _profileRepository.GetUsers(usersList);
-                foreach(var item in response)
+                foreach (var item in response)
                 {
                     item.User = users.FirstOrDefault(u => u.Id == item.UserId);
                 }
@@ -147,6 +147,41 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                         _response.Message = "Status Update Failed";
                     }
                 }
+            }
+            return Ok(_response);
+        }
+
+        [HttpPost]
+        [Route("paginationEndpoint")]
+        [Authorize]
+        public async Task<IActionResult> pagination([FromBody] SP_VacancyRequestDto request)
+        {
+            if(request == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
+            }
+            else
+            {
+                List<UserVacancyRequest> result = await _applicationRepository.GetAllVacnacyByPageAsync(request);
+                List<UserVacancyResponseDto> response = [];
+                List<Guid> usersList = [];
+
+                foreach (var application in result)
+                {
+                    usersList.Add(application.UserId);
+                    response.Add(_mapper.Map<UserVacancyResponseDto>(application));
+                }
+
+                List<UserDto> users = await _profileRepository.GetUsers(usersList);
+                foreach (var item in response)
+                {
+                    item.User = users.FirstOrDefault(u => u.Id == item.UserId);
+                }
+                _response.Result = new {
+                    totalRecords= response.First().TotalRecords,
+                    results = response
+                };
             }
             return Ok(_response);
         }
