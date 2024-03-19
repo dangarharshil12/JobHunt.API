@@ -2,6 +2,7 @@
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -83,7 +84,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPost]
         [Route("createApplication")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
         {
             if (request == null)
@@ -114,7 +115,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPost]
         [Route("processApplication")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = SD.RoleEmployer)]
         public async Task<IActionResult> processApplication([FromBody] statusChangeRequestDto request)
         {
             string status = request.status;

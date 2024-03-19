@@ -34,7 +34,7 @@ namespace JobHunt.Services.AuthAPI.Repositories
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddMinutes(240),
                 signingCredentials: credentials
             );
 

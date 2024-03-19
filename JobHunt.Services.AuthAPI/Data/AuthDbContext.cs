@@ -1,4 +1,5 @@
 ﻿using JobHunt.Services.AuthAPI.Models;
+using JobHunt.Services.AuthAPI.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,22 +28,22 @@ namespace JobHunt.Services.AuthAPI.Data
                 new IdentityRole()
                 {
                     Id = JobSeekerRoleId,
-                    Name = "JobSeeker",
-                    NormalizedName = "JobSeeker".ToUpper(),
+                    Name = SD.RoleJobSeeker,
+                    NormalizedName = SD.RoleJobSeeker.ToUpper(),
                     ConcurrencyStamp = JobSeekerRoleId
                 },
                 new IdentityRole()
                 {
                     Id = EmployerRoleId,
-                    Name = "Employer",
-                    NormalizedName = "Employer".ToUpper(),
+                    Name = SD.RoleEmployer,
+                    NormalizedName = SD.RoleEmployer.ToUpper(),
                     ConcurrencyStamp = EmployerRoleId
                 },
                 new IdentityRole()
                 {
                     Id = AdminRoleId,
-                    Name = "Admin",
-                    NormalizedName = "Admin".ToUpper(),
+                    Name = SD.RoleAdmin,
+                    NormalizedName = SD.RoleAdmin.ToUpper(),
                     ConcurrencyStamp = AdminRoleId
                 }
             };

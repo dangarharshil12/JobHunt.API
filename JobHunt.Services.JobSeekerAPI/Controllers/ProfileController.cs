@@ -2,6 +2,7 @@
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using JobHunt.Services.JobSeekerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -96,7 +97,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPost]
         [Route("addProfile")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> AddProfile(UserDto user)
         {
             if(user == null)
@@ -118,7 +119,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPost]
         [Route("uploadResume")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName)
         {
             ValidateFileUpload(file);
@@ -144,7 +145,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPut]
         [Route("updateProfile/{email}")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> UpdateProfile([FromBody] UserDto user, [FromRoute] string email)
         {
             if(user == null || email == null)

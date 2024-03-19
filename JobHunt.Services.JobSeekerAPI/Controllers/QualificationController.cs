@@ -2,6 +2,7 @@
 using JobHunt.Services.JobSeekerAPI.Models;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
+using JobHunt.Services.JobSeekerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -75,7 +76,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPost]
         [Route("addQualification")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> CreateQualification([FromBody] QualificationRequestDto request)
         {
             if(request == null)
@@ -97,7 +98,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpPut]
         [Route("updateQualification/{id}")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> UpdateQualification([FromBody] QualificationRequestDto request, [FromRoute] Guid id)
         {
             if (request == null || id == Guid.Empty)
@@ -128,7 +129,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
         [HttpDelete]
         [Route("deleteQualification/{id}")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> DeleteQualification([FromRoute] Guid id)
         {
             if(id == Guid.Empty)

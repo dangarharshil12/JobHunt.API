@@ -3,6 +3,7 @@ using AutoMapper;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
+using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,7 +79,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPost]
         [Route("addDetails")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = SD.RoleEmployer)]
         public async Task<IActionResult> CreateCompany([FromBody] EmployerDto request)
         {
             if(request == null)
@@ -108,7 +109,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpPut]
         [Route("updateDetails/{email}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = SD.RoleEmployer)]
         public async Task<IActionResult> UpdateCompany([FromRoute] string email, [FromBody] EmployerDto request)
         {
             if (email == null)
