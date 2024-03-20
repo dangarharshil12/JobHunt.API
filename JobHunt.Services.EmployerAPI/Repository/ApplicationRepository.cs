@@ -26,7 +26,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
 
         public async Task<List<UserVacancyRequest>> GetAllByUserIdAsync(Guid userId)
         {
-            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
+            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).ToListAsync();
             return result;
         }
 
@@ -46,14 +46,15 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<List<UserVacancyRequest>> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request)
+        public List<UserVacancyRequest> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request)
         {
-            var result = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();
+            // Basic SP with pagination only
+            // var result = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();
+            // List<UserVacancyRequest> response = result;
+
+            // Modified SP with global searching, sorting, advanced searching and pagination
+            var result = _db.UserVacancyRequests.FromSql($"GET_JOBAPPLICATION_LIST @SEARCH_TEXT={request.SearchText}, @SORT_COLUMN_NAME={request.SortCoumnName}, @SORT_COLUMN_DIRECTION={request.SortCoumnDirection}, @START_INDEX={request.StartIndex}, @PAGE_SIZE={request.PageSize}, @VACANCY_ID={request.VacancyId}, @FULLNAME={request.FullName}, @EMAIL={request.Email}, @FROMDATE={request.FromDate}, @TODATE={request.ToDate}, @APPLICATIONSTATUS={request.ApplicationStatus}").ToList();
             List<UserVacancyRequest> response = result;
-            foreach (var item in response)
-            {
-                item.Vacancy = await _db.VacancyDetails.FirstOrDefaultAsync(u => u.Id == item.VacancyId);
-            }
 
             return response;
         }

@@ -164,8 +164,9 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
-                List<UserVacancyRequest> result = await _applicationRepository.GetAllVacnacyByPageAsync(request);
+                List<UserVacancyRequest> result = _applicationRepository.GetAllVacnacyByPageAsync(request);
                 List<UserVacancyResponseDto> response = [];
+
                 List<Guid> usersList = [];
 
                 foreach (var application in result)
@@ -179,8 +180,9 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 {
                     item.User = users.FirstOrDefault(u => u.Id == item.UserId);
                 }
+
                 _response.Result = new {
-                    totalRecords= response.First().TotalRecords,
+                    totalRecords= response.FirstOrDefault()?.TotalRecords,
                     results = response
                 };
             }

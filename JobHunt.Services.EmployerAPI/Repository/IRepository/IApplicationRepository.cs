@@ -11,6 +11,6 @@ namespace JobHunt.Services.EmployerAPI.Repository.IRepository
         Task<List<UserVacancyRequest>> GetAllByVacancyIdAsync(Guid vacancyId);
         Task<UserVacancyRequest> CreateAsync(UserVacancyRequest request);
         Task<UserVacancyRequest?> UpdateAsync(UserVacancyRequest request);
-        Task<List<UserVacancyRequest>> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request);
+        List<UserVacancyRequest> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request);
     }
 }
