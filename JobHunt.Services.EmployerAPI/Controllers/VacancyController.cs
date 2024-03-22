@@ -29,6 +29,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getAllVacancies")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllVacancies()
         {
             List<Vacancy> result = await _vacancyRepository.GetAllAsync();
@@ -43,6 +44,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getVacancyById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetVacancyById([FromRoute] Guid id)
         {
             bool isApplied = false;
@@ -71,6 +73,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getByCompany/{email}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetVacancyByCompany([FromRoute] string email)
         {
             if (email == null)
@@ -106,8 +109,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = SD.RoleEmployer)]
         [Route("addVacancy")]
+        [Authorize(Roles = SD.RoleEmployer)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AddVacancy([FromBody] VacancyRequestDto request)
         {
             string email = request.PublishedBy;
@@ -147,8 +152,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPut]
+        [Route("vacancy/{id}")]
         [Authorize(Roles = SD.RoleEmployer)]
-        [Route("updateVacancy/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateVacancy([FromBody] VacancyRequestDto vacancyDto, [FromRoute] Guid id)
         {
             string email = vacancyDto.PublishedBy;
@@ -181,8 +188,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpDelete]
+        [Route("vacancy/{id}")]
         [Authorize(Roles = SD.RoleEmployer)]
-        [Route("deleteVacancy/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteVacancy(Guid id)
         {
             if(id == Guid.Empty)

@@ -24,8 +24,10 @@ namespace JobHunt.Services.AuthAPI.Controllers
 
         [HttpPost]
         [Route("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
+            // Checking whether user already exists or not
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if(existingUser != null)
             {
@@ -79,6 +81,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
 
         [HttpPost]
         [Route("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody] LoginRequstDto request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -118,6 +121,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
 
         [HttpPost]
         [Route("forgotpassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ForgotPassword([FromBody] LoginRequstDto request)
         {
             if(request.Email == null)

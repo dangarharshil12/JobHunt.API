@@ -24,8 +24,10 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllQualificationsByUserId/{id}")]
         [Authorize]
+        [Route("GetAllQualificationsByUserId/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllQualifications(Guid id)
         {
             if(id == Guid.Empty)
@@ -48,8 +50,10 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetQualificationById/{id}")]
         [Authorize]
+        [Route("GetQualificationById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetQualificationById(Guid id)
         {
             if(id == Guid.Empty)
@@ -77,6 +81,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpPost]
         [Route("addQualification")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateQualification([FromBody] QualificationRequestDto request)
         {
             if(request == null)
@@ -97,7 +103,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpPut]
-        [Route("updateQualification/{id}")]
+        [Route("qualification/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> UpdateQualification([FromBody] QualificationRequestDto request, [FromRoute] Guid id)
         {
@@ -128,8 +134,10 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteQualification/{id}")]
+        [Route("qualification/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteQualification([FromRoute] Guid id)
         {
             if(id == Guid.Empty)

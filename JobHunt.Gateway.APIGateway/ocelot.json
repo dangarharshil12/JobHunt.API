@@ -1,6 +1,7 @@
 {
   "Routes": [
     // Employer API
+    // company controller
     {
       "DownstreamPathTemplate": "/api/company/{email}",
       "DownstreamScheme": "https",
@@ -26,7 +27,7 @@
       "UpstreamhttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/company/addDetails",
+      "DownstreamPathTemplate": "/api/company/companyDetails",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -34,27 +35,13 @@
           "Port": 7284
         }
       ],
-      "UpstreamPathTemplate": "/api/company/addDetails",
-      "UpstreamhttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/api/company/companyDetails",
+      "UpstreamhttpMethod": [ "Post", "Put" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-    {
-      "DownstreamPathTemplate": "/api/company/updateDetails/{email}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7284
-        }
-      ],
-      "UpstreamPathTemplate": "/api/company/updateDetails/{email}",
-      "UpstreamhttpMethod": [ "Put" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
+    // vacancy controller
     {
       "DownstreamPathTemplate": "/api/vacancy/getAllVacancies",
       "DownstreamScheme": "https",
@@ -107,7 +94,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/vacancy/updateVacancy/{id}",
+      "DownstreamPathTemplate": "/api/vacancy/vacancy/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -115,27 +102,13 @@
           "Port": 7284
         }
       ],
-      "UpstreamPathTemplate": "/api/vacancy/updateVacancy/{id}",
-      "UpstreamhttpMethod": [ "Put" ],
+      "UpstreamPathTemplate": "/api/vacancy/vacancy/{id}",
+      "UpstreamhttpMethod": [ "Put", "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-    {
-      "DownstreamPathTemplate": "/api/vacancy/deleteVacancy/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7284
-        }
-      ],
-      "UpstreamPathTemplate": "/api/vacancy/deleteVacancy/{id}",
-      "UpstreamhttpMethod": [ "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
+    // application controller
     {
       "DownstreamPathTemplate": "/api/application/getAllByUser/{id}",
       "DownstreamScheme": "https",
@@ -213,6 +186,7 @@
     },
 
     // JobSeeker API
+    // profile controller
     {
       "DownstreamPathTemplate": "/api/jobSeeker/getByEmail/{email}",
       "DownstreamScheme": "https",
@@ -244,7 +218,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/jobSeeker/addProfile",
+      "DownstreamPathTemplate": "/api/jobSeeker/profile",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -252,8 +226,8 @@
           "Port": 7246
         }
       ],
-      "UpstreamPathTemplate": "/api/jobSeeker/addProfile",
-      "UpstreamhttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/api/jobSeeker/profile",
+      "UpstreamhttpMethod": [ "Post", "Put" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
@@ -273,21 +247,8 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
-    {
-      "DownstreamPathTemplate": "/api/jobSeeker/updateProfile/{email}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7246
-        }
-      ],
-      "UpstreamPathTemplate": "/api/jobSeeker/updateProfile/{email}",
-      "UpstreamhttpMethod": [ "Put" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
+    
+    // experience controller
     {
       "DownstreamPathTemplate": "/api/experience/getAllExperiencesByUserId/{userId}",
       "DownstreamScheme": "https",
@@ -334,7 +295,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/experience/updateExperience/{id}",
+      "DownstreamPathTemplate": "/api/experience/experience/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -343,26 +304,12 @@
         }
       ],
       "UpstreamPathTemplate": "/api/experience/updateExperience/{id}",
-      "UpstreamhttpMethod": [ "Put" ],
+      "UpstreamhttpMethod": [ "Put" , "Delete"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-    {
-      "DownstreamPathTemplate": "/api/experience/deleteExperience/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7246
-        }
-      ],
-      "UpstreamPathTemplate": "/api/experience/deleteExperience/{id}",
-      "UpstreamhttpMethod": [ "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
+    // qualification controller
     {
       "DownstreamPathTemplate": "/api/qualification/GetAllQualificationsByUserId/{id}",
       "DownstreamScheme": "https",
@@ -409,7 +356,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/qualification/updateQualification/{id}",
+      "DownstreamPathTemplate": "/api/qualification/qualification/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -417,23 +364,8 @@
           "Port": 7246
         }
       ],
-      "UpstreamPathTemplate": "/api/qualification/updateQualification/{id}",
-      "UpstreamhttpMethod": [ "Put" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/qualification/deleteQualification/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7246
-        }
-      ],
-      "UpstreamPathTemplate": "/api/qualification/deleteQualification/{id}",
-      "UpstreamhttpMethod": [ "Delete" ],
+      "UpstreamPathTemplate": "/api/qualification/qualification/{id}",
+      "UpstreamhttpMethod": [ "Put", "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }

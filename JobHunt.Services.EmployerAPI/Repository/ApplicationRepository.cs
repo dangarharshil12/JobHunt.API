@@ -26,7 +26,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
 
         public async Task<List<UserVacancyRequest>> GetAllByUserIdAsync(Guid userId)
         {
-            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).ToListAsync();
+            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
             return result;
         }
 

@@ -28,6 +28,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [HttpGet]
         [Route("getAllByUser/{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
         {
             if(id == Guid.Empty)
@@ -51,6 +53,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [HttpGet]
         [Route("getAllByVacancy/{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> getApplicationsByVacancyId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
@@ -85,6 +89,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [HttpPost]
         [Route("createApplication")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
         {
             if (request == null)
@@ -116,6 +122,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [HttpPost]
         [Route("processApplication")]
         [Authorize(Roles = SD.RoleEmployer)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> processApplication([FromBody] statusChangeRequestDto request)
         {
             string status = request.status;
@@ -155,6 +163,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [HttpPost]
         [Route("paginationEndpoint")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> pagination([FromBody] SP_VacancyRequestDto request)
         {
             if(request == null)

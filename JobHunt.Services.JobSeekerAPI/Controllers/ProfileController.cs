@@ -28,6 +28,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpPost]
         [Route("getUsers")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetUsers([FromBody] List<Guid> userList)
         {
             List<User> users = await _profileRepository.GetUsersAsync(userList);
@@ -42,6 +44,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpGet]
         [Route("getByEmail/{email}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetProfileByEmail([FromRoute] string email) 
         {
             if(email == null)
@@ -70,6 +74,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpGet]
         [Route("getByUserId/{userId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetProfileByUserId([FromRoute] Guid userId)
         {
             if (userId == Guid.Empty)
@@ -96,7 +102,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("addProfile")]
+        [Route("profile")]
         [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> AddProfile(UserDto user)
         {
@@ -120,6 +126,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpPost]
         [Route("uploadResume")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName)
         {
             ValidateFileUpload(file);
@@ -144,14 +152,16 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpPut]
-        [Route("updateProfile/{email}")]
+        [Route("profile")]
         [Authorize(Roles = SD.RoleJobSeeker)]
-        public async Task<IActionResult> UpdateProfile([FromBody] UserDto user, [FromRoute] string email)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UpdateProfile([FromBody] UserDto user)
         {
-            if(user == null || email == null)
+            if(user == null)
             {
                 _response.IsSuccess = false;
-                _response.Message = "User or Email is Empty";
+                _response.Message = "User is Empty";
             }
             else
             {

@@ -26,6 +26,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("{email}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyByEmail([FromRoute] string email)
         {
             if(email == null)
@@ -53,6 +54,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
         [HttpGet]
         [Route("getProfileByName/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyByName([FromRoute] string name)
         {
             if (name == null)
@@ -78,8 +80,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("addDetails")]
+        [Route("companyDetails")]
         [Authorize(Roles = SD.RoleEmployer)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateCompany([FromBody] EmployerDto request)
         {
             if(request == null)
@@ -108,18 +112,13 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         }
 
         [HttpPut]
-        [Route("updateDetails/{email}")]
+        [Route("companyDetails")]
         [Authorize(Roles = SD.RoleEmployer)]
-        public async Task<IActionResult> UpdateCompany([FromRoute] string email, [FromBody] EmployerDto request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UpdateCompany([FromBody] EmployerDto request)
         {
-            if (email == null)
-            {
-                _response.IsSuccess = false;
-                _response.Message = "Email is Empty";
-            }
-            else
-            {
-                var result = await _companyRepository.GetByEmailAsync(email);
+                var result = await _companyRepository.GetByEmailAsync(request.CreatedBy);
                 if (result == null)
                 {
                     _response.IsSuccess = false;
@@ -143,7 +142,6 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                         _response.Result = response;
                     }
                 }
-            }
             return Ok(_response);
         }
     }

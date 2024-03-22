@@ -26,6 +26,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpGet]
         [Route("getAllExperiencesByUserId/{userId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllExperiencesByUserId(Guid userId)
         {
             if(userId == Guid.Empty)
@@ -50,6 +52,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpGet]
         [Route("getExperienceById/{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetExperienceById(Guid id)
         {
             if(id == Guid.Empty)
@@ -78,6 +82,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [HttpPost]
         [Route("addExperience")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AddExperience([FromBody] UserExperienceRequestDto request)
         {
             if(request == null)
@@ -98,8 +104,10 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpPut]
-        [Route("updateExperience/{id}")]
+        [Route("experience/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateExperience([FromBody] UserExperienceRequestDto request, [FromRoute] Guid id)
         {
             if(id == Guid.Empty || request == null)
@@ -129,8 +137,10 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteExperience/{id}")]
+        [Route("experience/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteExperience([FromRoute] Guid id)
         {
             if(id == Guid.Empty)
