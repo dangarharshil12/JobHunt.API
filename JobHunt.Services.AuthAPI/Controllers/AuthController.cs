@@ -135,7 +135,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
                 if(user == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "User does'nt exist. Please Register";
+                    _response.Message = "User does not exist. Please Register";
                 }
                 else
                 {

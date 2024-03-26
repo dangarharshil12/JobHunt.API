@@ -17,6 +17,19 @@ namespace JobHunt.Services.AuthAPI.Tests
         private AuthController _authController;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private Mock<ITokenRepository> _mockTokenRepository;
+        private RegisterRequestDto user;
+
+        public AuthControllerRegisterEndpointTests()
+        {
+            user = new RegisterRequestDto
+            {
+                FirstName = "testfirst",
+                LastName = "testlast",
+                Password = "Test@123",
+                Email = "test123@eamil.com",
+                PhoneNumber = "1234567890",
+            };
+        }
 
         [SetUp]
         public void Setup()
@@ -59,7 +72,8 @@ namespace JobHunt.Services.AuthAPI.Tests
             _mockUserManager.Setup(m => m.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
             // Act
-            var result = await _authController.Register(new RegisterRequestDto { Role = userRole });
+            user.Role = userRole;
+            var result = await _authController.Register(user);
 
             // Assert
             var okResult = result as OkObjectResult;
