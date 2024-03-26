@@ -19,7 +19,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
-            _response = new();
+            _response = new ResponseDto();
         }
 
         [HttpPost]
