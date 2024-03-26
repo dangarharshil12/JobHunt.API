@@ -46,7 +46,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public List<UserVacancyRequest> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request)
+        public List<UserVacancyRequest> GetAllVacancyByPageAsync(SP_VacancyRequestDto request)
         {
             // Basic SP with pagination only
             // var result = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();

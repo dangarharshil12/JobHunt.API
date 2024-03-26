@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Http;
 
 namespace JobHunt.Services.JobSeekerAPI.Repository
 {
-    public class ResumeRespository : IResumeRepository
+    public class UploadRespository : IUploadRepository
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationDbContext _db;
-        public ResumeRespository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public UploadRespository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
             _db = db;
         }
 
-        public async Task<ResumeDto> Upload(IFormFile file, ResumeDto resume)
+        public async Task<UploadDto> Upload(IFormFile file, UploadDto resume)
         {
             var localPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Resumes", $"{resume.FileName}{resume.FileExtension}");
             FileInfo oldFile = new FileInfo(localPath);
@@ -35,6 +35,25 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
 
             resume.Url = urlPath;
             return resume;            
+        }
+
+        public async Task<UploadDto> UploadImage(IFormFile file, UploadDto image)
+        {
+            var localPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{image.FileName}{image.FileExtension}");
+            FileInfo oldFile = new FileInfo(localPath);
+            if (oldFile.Exists)
+            {
+                oldFile.Delete();
+            }
+
+            using var stream = new FileStream(localPath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            var httpRequest = _httpContextAccessor.HttpContext.Request;
+            var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{image.FileName}{image.FileExtension}";
+
+            image.Url = urlPath;
+            return image;
         }
     }
 }

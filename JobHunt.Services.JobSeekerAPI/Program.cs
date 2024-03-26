@@ -34,7 +34,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IQualificationRepository, QualificationRepository>();
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
-builder.Services.AddScoped<IResumeRepository, ResumeRespository>();
+builder.Services.AddScoped<IUploadRepository, UploadRespository>();
 
 // Authorization for API
 builder.Services.AddSwaggerGen(option =>
@@ -92,6 +92,12 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resumes")),
     RequestPath = "/Resumes"
+});
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
 });
 
 app.MapControllers();

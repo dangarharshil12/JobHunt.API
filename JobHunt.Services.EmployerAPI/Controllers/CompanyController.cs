@@ -14,14 +14,16 @@ namespace JobHunt.Services.EmployerAPI.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IMapper _mapper;
         protected ResponseDto _response;
 
-        public CompanyController(ICompanyRepository companyRepository, IMapper mapper)
+        public CompanyController(ICompanyRepository companyRepository, IMapper mapper, IImageRepository imageRepository)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
             _response = new();
+            _imageRepository = imageRepository;
         }
 
         [HttpGet]
@@ -143,6 +145,47 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                     }
                 }
             return Ok(_response);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.RoleEmployer)]
+        [Route("uploadImage")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string fileName)
+        {
+            ValidateFileUpload(file);
+
+            if (ModelState.IsValid)
+            {
+                var resume = new CompanyLogoDTO
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName
+                };
+
+                resume = await _imageRepository.Upload(file, resume);
+                _response.Result = resume.Url;
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Image Upload Model is not Valid";
+            }
+            return Ok(_response);
+        }
+
+        private void ValidateFileUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 10 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 10MB");
+            }
         }
     }
 }

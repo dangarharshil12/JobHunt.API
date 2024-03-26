@@ -21,5 +21,6 @@ namespace JobHunt.Services.EmployerAPI.Models
         public string About { get; set; }
         [Required]
         public string CreatedBy { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

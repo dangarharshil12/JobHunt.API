@@ -10,5 +10,6 @@
         public int StartYear { get; set; }
         public string About { get; set; }
         public string CreatedBy { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

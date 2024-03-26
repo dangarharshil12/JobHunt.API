@@ -41,6 +41,22 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+    {
+      "DownstreamPathTemplate": "/api/company/uploadImage",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7284
+        }
+      ],
+      "UpstreamPathTemplate": "/api/company/uploadImage",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
     // vacancy controller
     {
       "DownstreamPathTemplate": "/api/vacancy/getAllVacancies",
@@ -247,7 +263,22 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
-    
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/uploadImage",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/uploadImage",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
     // experience controller
     {
       "DownstreamPathTemplate": "/api/experience/getAllExperiencesByUserId/{userId}",
@@ -303,8 +334,8 @@
           "Port": 7246
         }
       ],
-      "UpstreamPathTemplate": "/api/experience/updateExperience/{id}",
-      "UpstreamhttpMethod": [ "Put" , "Delete"],
+      "UpstreamPathTemplate": "/api/experience/experience/{id}",
+      "UpstreamhttpMethod": [ "Put", "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }

@@ -14,14 +14,14 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IProfileRepository _profileRepository;
-        private readonly IResumeRepository _resumeRepository;
+        private readonly IUploadRepository _uploadRepository;
         protected ResponseDto _response;
 
-        public ProfileController(IMapper mapper, IProfileRepository profileRepository, IResumeRepository resumeRepository)
+        public ProfileController(IMapper mapper, IProfileRepository profileRepository, IUploadRepository uploadRepository)
         {
             _mapper = mapper;
             _profileRepository = profileRepository;
-            _resumeRepository = resumeRepository;
+            _uploadRepository = uploadRepository;
             _response = new();
         }
 
@@ -134,13 +134,13 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var resume = new ResumeDto
+                var resume = new UploadDto
                 {
                     FileExtension = Path.GetExtension(file.FileName).ToLower(),
                     FileName = fileName
                 };
 
-                resume = await _resumeRepository.Upload(file, resume);
+                resume = await _uploadRepository.Upload(file, resume);
                 _response.Result = resume.Url;
             }
             else
@@ -181,6 +181,47 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 }
             }
             return Ok(_response);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.RoleJobSeeker)]
+        [Route("uploadImage")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string fileName)
+        {
+            ValidateImageUpload(file);
+
+            if (ModelState.IsValid)
+            {
+                var image = new UploadDto
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName
+                };
+
+                image = await _uploadRepository.UploadImage(file, image);
+                _response.Result = image.Url;
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Image Upload Model is not Valid";
+            }
+            return Ok(_response);
+        }
+
+        private void ValidateImageUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 10 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 10MB");
+            }
         }
 
         private void ValidateFileUpload(IFormFile file)

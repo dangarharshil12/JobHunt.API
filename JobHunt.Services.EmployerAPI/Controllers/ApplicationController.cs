@@ -174,7 +174,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
-                List<UserVacancyRequest> result = _applicationRepository.GetAllVacnacyByPageAsync(request);
+                List<UserVacancyRequest> result = _applicationRepository.GetAllVacancyByPageAsync(request);
                 List<UserVacancyResponseDto> response = [];
 
                 List<Guid> usersList = [];
