@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Gateway.APIGateway"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2E51BB0B-AA3D-4191-B17E-B046416F942D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.AuthAPI.Tests", "JobHunt.Services.AuthAPI.Tests\JobHunt.Services.AuthAPI.Tests.csproj", "{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.AuthAPI.Tests", "JobHunt.Services.AuthAPI.Tests\JobHunt.Services.AuthAPI.Tests.csproj", "{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.EmployerAPI.Tests", "JobHunt.Services.EmployerAPI.Tests\JobHunt.Services.EmployerAPI.Tests.csproj", "{E13E7300-5897-4EE9-860F-46425650EE1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E13E7300-5897-4EE9-860F-46425650EE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E13E7300-5897-4EE9-860F-46425650EE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E13E7300-5897-4EE9-860F-46425650EE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E13E7300-5897-4EE9-860F-46425650EE1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{219118B9-957D-4856-9A8B-98E064C3D1B6} = {ABDCE30D-DE1A-4D3E-9A16-2FD6E05A911B}
 		{F3332021-CC2F-4F4C-A1DD-9CADE4B42D16} = {EA92AC4B-1A8A-4B94-8F20-D7DDB2141373}
 		{0D747466-D5F3-4EBC-A241-4BDA55B7EDED} = {2E51BB0B-AA3D-4191-B17E-B046416F942D}
+		{E13E7300-5897-4EE9-860F-46425650EE1E} = {2E51BB0B-AA3D-4191-B17E-B046416F942D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54D92301-4417-40C1-9DF7-BED6CBA1679C}

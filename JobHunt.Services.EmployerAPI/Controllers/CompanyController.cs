@@ -6,6 +6,7 @@ using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyByEmail([FromRoute] string email)
         {
-            if(email == null)
+            if(email == null || email.Trim() == "")
             {
                 _response.IsSuccess = false;
                 _response.Message = "Email is Empty";
@@ -59,7 +60,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyByName([FromRoute] string name)
         {
-            if (name == null)
+            if (name == null || name.Trim() == "")
             {
                 _response.IsSuccess = false;
                 _response.Message = "Organization Name is Empty";
@@ -106,7 +107,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                     Employer employer = _mapper.Map<Employer>(request);
                     var result = await _companyRepository.CreateAsync(employer);
                     EmployerDto response = _mapper.Map<EmployerDto>(result);
-                    _response.Message = "Organization Information Created Successfully!";
+                    _response.Message = "Organization Profile Created Successfully!";
                     _response.Result= response;
                 }
             }
@@ -120,30 +121,22 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateCompany([FromBody] EmployerDto request)
         {
-                var result = await _companyRepository.GetByEmailAsync(request.CreatedBy);
-                if (result == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "Organization information not found";
-                }
-                else
-                {
-                    Employer employer = _mapper.Map<Employer>(request);
-                    employer.Id = result.Id;
-
-                    result = await _companyRepository.UpdateAsync(employer);
-                    if(result == null)
-                    {
-                        _response.IsSuccess = false;
-                        _response.Message = "Update Failed";
-                    }
-                    else
-                    {
-                        EmployerDto response = _mapper.Map<EmployerDto>(result);
-                        _response.Message = "Organization Information Updated Successfully";
-                        _response.Result = response;
-                    }
-                }
+            var result = await _companyRepository.GetByEmailAsync(request.CreatedBy);
+            if (result == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Organization Information Not Found";
+            }
+            else
+            {
+                Employer employer = _mapper.Map<Employer>(request);
+                employer.Id = result.Id;
+                
+                result = await _companyRepository.UpdateAsync(employer);
+                    
+                _response.Message = "Organization Information Updated Successfully";
+                _response.Result = _mapper.Map<EmployerDto>(result);
+            }
             return Ok(_response);
         }
 
@@ -156,19 +149,20 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var resume = new CompanyLogoDTO
+                var companylogo = new CompanyLogoDTO
                 {
                     FileExtension = Path.GetExtension(file.FileName).ToLower(),
                     FileName = fileName
                 };
 
-                resume = await _imageRepository.Upload(file, resume);
-                _response.Result = resume.Url;
+                companylogo = await _imageRepository.Upload(file, companylogo);
+                _response.Message = "Image Upload Success!";
+                _response.Result = companylogo.Url;
             }
             else
             {
                 _response.IsSuccess = false;
-                _response.Message = "Image Upload Model is not Valid";
+                _response.Message = "Inavalid File [Ensure File Appropriate Extension and not more than 10MB]";
             }
             return Ok(_response);
         }
@@ -180,11 +174,13 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
             {
                 ModelState.AddModelError("file", "Unsupported File Format");
+                return;
             }
 
             if (file.Length > 10 * 1024 * 1024)
             {
                 ModelState.AddModelError("file", "File Size cannot be more than 10MB");
+                return;
             }
         }
     }
