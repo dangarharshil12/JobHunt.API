@@ -16,7 +16,7 @@ namespace JobHunt.Services.AuthAPI.Tests
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private AuthController _controller;
         private Mock<ITokenRepository> _mockTokenRepository;
-
+        private ApplicationUser user;
 
         [SetUp]
         public void Setup()
@@ -27,20 +27,31 @@ namespace JobHunt.Services.AuthAPI.Tests
             _controller = new AuthController(_mockUserManager.Object, _mockTokenRepository.Object);
         }
 
+        public AuthControllerForgotPasswordEndpointTests()
+        {
+            user = new ApplicationUser
+            {
+                FullName = "Test Test",
+                UserName = "test@example.com",
+                Email = "test@example.com",
+                PhoneNumber = "1234567890",
+            };
+        }
+
         [Test]
         public async Task ForgotPassword_WithValidEmail_ShouldSuccess()
         {
             // Arrange
             var request = new LoginRequstDto { Email = "test@example.com", Password = "Test@123" };
-            var user = new ApplicationUser();
+            
 
-            _mockUserManager.Setup(m => m.FindByEmailAsync(request.Email))
+            _mockUserManager.Setup(m => m.FindByEmailAsync(It.IsAny<string>()))
                             .ReturnsAsync(user);
 
-            _mockUserManager.Setup(m => m.GeneratePasswordResetTokenAsync(user))
+            _mockUserManager.Setup(m => m.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>()))
                             .ReturnsAsync("randomtoken");
 
-            _mockUserManager.Setup(m => m.ResetPasswordAsync(user, "randomtoken", request.Password))
+            _mockUserManager.Setup(m => m.ResetPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<string>()))
                             .ReturnsAsync(IdentityResult.Success);
 
             // Act
@@ -49,9 +60,14 @@ namespace JobHunt.Services.AuthAPI.Tests
             // Assert
             var okResult = result as OkObjectResult;
             var response = okResult.Value as ResponseDto;
+
             Assert.That(response, Is.Not.Null);
             Assert.That(response.IsSuccess, Is.True);
             Assert.That(response.Message, Is.EqualTo("Password Reset Successfull"));
+
+            _mockUserManager.Verify(u => u.FindByEmailAsync(request.Email), Times.Once);
+            _mockUserManager.Verify(u => u.GeneratePasswordResetTokenAsync(user), Times.Once);
+            _mockUserManager.Verify(u => u.ResetPasswordAsync(user, "randomtoken", request.Password), Times.Once);
         }
 
         [Test]
@@ -60,19 +76,46 @@ namespace JobHunt.Services.AuthAPI.Tests
             // Arrange
             var request = new LoginRequstDto { Email = "nonexistent@example.com", Password = "Test@123" };
 
-            _mockUserManager.Setup(m => m.FindByEmailAsync(request.Email))
+            _mockUserManager.Setup(m => m.FindByEmailAsync(It.IsAny<string>()))
                             .ReturnsAsync((ApplicationUser)null);
 
             // Act
             var result = await _controller.ForgotPassword(request);
 
             // Assert
-            var badRequestResult = result as OkObjectResult;
-            var response = badRequestResult.Value as ResponseDto;
+            var requestResult = result as OkObjectResult;
+            var response = requestResult.Value as ResponseDto;
+
             Assert.That(response, Is.Not.Null);
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("User does not exist. Please Register"));
+
+            _mockUserManager.Verify(u => u.FindByEmailAsync(request.Email), Times.Once);
         }
 
+        [TestCase("", "")]
+        [TestCase("test@eamil.com", "")]
+        [TestCase("", "newpassword")]
+        [TestCase(null, null)]
+        [TestCase(null, "newpassword")]
+        [TestCase("", null)]
+        public async Task ForgotPassword_WithEmptyRequest_ShouldFail(string email, string password)
+        {
+            // Arrange
+            var request = new LoginRequstDto { Email = email, Password = password };
+
+            // Act
+            var result = await _controller.ForgotPassword(request);
+
+            // Assert
+            var requestResult = result as OkObjectResult;
+            var response = requestResult.Value as ResponseDto;
+
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.IsSuccess, Is.False);
+            Assert.That(response.Message, Is.EqualTo("Incomplete Credentials (Either Email or Password or both are Empty)"));
+            
+            _mockUserManager.Verify(u => u.FindByEmailAsync(request.Email), Times.Never);
+        }
     }
 }

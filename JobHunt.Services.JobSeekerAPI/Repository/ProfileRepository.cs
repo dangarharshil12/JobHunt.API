@@ -18,7 +18,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return await _db.Users.Where(u => users.Contains(u.Id)).ToListAsync();
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
             return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
@@ -44,7 +44,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return null;
         }
 
-        public async Task<User> GetByUserIdAsync(Guid userId)
+        public async Task<User?> GetByUserIdAsync(Guid userId)
         {
             return await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }

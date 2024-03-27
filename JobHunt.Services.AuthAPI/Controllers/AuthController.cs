@@ -4,6 +4,7 @@ using JobHunt.Services.AuthAPI.Models.Dto;
 using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JobHunt.Services.AuthAPI.Controllers
 {
@@ -51,6 +52,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
                     if (identityResult.Succeeded)
                     {
                         _response.Message = "User Registration Successful";
+                        _response.Result = user;
                     }
                     else
                     {
@@ -124,10 +126,10 @@ namespace JobHunt.Services.AuthAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ForgotPassword([FromBody] LoginRequstDto request)
         {
-            if(request.Email == null)
+            if(request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
             {
                 _response.IsSuccess= false;
-                _response.Message = "Empty Email";
+                _response.Message = "Incomplete Credentials (Either Email or Password or both are Empty)";
             }
             else
             {

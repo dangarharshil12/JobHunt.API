@@ -39,7 +39,6 @@ namespace JobHunt.Services.AuthAPI.Repositories
             );
 
             return new JwtSecurityTokenHandler().WriteToken(Token);
-        
         }
     }
 }

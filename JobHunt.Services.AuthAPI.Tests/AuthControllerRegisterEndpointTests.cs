@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using JobHunt.Services.AuthAPI.Utility;
+using Azure.Core;
 
 
 namespace JobHunt.Services.AuthAPI.Tests
@@ -18,6 +19,7 @@ namespace JobHunt.Services.AuthAPI.Tests
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private Mock<ITokenRepository> _mockTokenRepository;
         private RegisterRequestDto user;
+        private ApplicationUser appUser;
 
         public AuthControllerRegisterEndpointTests()
         {
@@ -28,6 +30,14 @@ namespace JobHunt.Services.AuthAPI.Tests
                 Password = "Test@123",
                 Email = "test123@eamil.com",
                 PhoneNumber = "1234567890",
+            };
+
+            appUser = new ApplicationUser
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                UserName = user.Email?.Trim(),
+                Email = user.Email?.Trim(),
+                PhoneNumber = user.PhoneNumber?.Trim(),
             };
         }
 
@@ -46,10 +56,10 @@ namespace JobHunt.Services.AuthAPI.Tests
         public async Task Register_UserExists_ReturnsBadRequest()
         {
             // Arrange
-            _mockUserManager.Setup(m => m.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            _mockUserManager.Setup(m => m.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(appUser);
 
             // Act
-            var result = await _authController.Register(new RegisterRequestDto());
+            var result = await _authController.Register(user);
 
             // Assert
             var okResult = result as ObjectResult;
@@ -60,6 +70,10 @@ namespace JobHunt.Services.AuthAPI.Tests
 
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("User with this email already exist. Please Login"));
+
+            _mockUserManager.Verify(x => x.FindByEmailAsync(user.Email), Times.Once);
+            _mockUserManager.Verify(x => x.CreateAsync(appUser, user.Password), Times.Never);
+            _mockUserManager.Verify(x => x.AddToRoleAsync(appUser, user.Role), Times.Never);
         }
 
         [TestCase(SD.RoleJobSeeker)]
@@ -84,6 +98,8 @@ namespace JobHunt.Services.AuthAPI.Tests
 
             Assert.That(responseDto.IsSuccess, Is.True);
             Assert.That("User Registration Successful", Is.EqualTo(responseDto.Message));
+
+            _mockUserManager.Verify(x => x.FindByEmailAsync(user.Email), Times.Once);
         }
     }
 }
