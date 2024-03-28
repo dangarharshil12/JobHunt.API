@@ -6,6 +6,7 @@ using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
@@ -161,8 +162,11 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                ModelState.Values.Select(v => v.Errors[0]);
                 _response.IsSuccess = false;
-                _response.Message = "Inavalid File [Ensure File Appropriate Extension and not more than 10MB]";
+                _response.Message = string.Join(" | ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)); 
             }
             return Ok(_response);
         }

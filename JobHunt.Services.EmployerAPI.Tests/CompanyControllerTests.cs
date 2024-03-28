@@ -101,7 +101,7 @@ namespace JobHunt.Services.Employer.Tests
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public async Task GetCompanyByEmail_NullOrEmptyEmail_ShouldFail(string email)
+        public async Task GetCompanyByEmail_NullOrEmptyEmail_ReturnsFail(string email)
         {
             // Act
             var result = await _companyController.GetCompanyByEmail(email);
@@ -119,8 +119,10 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Never);
         }
 
+        
+        
         [Test]
-        public async Task GetCompanyByEmail_OrganizationDoesNotExists_ShouldFail()
+        public async Task GetCompanyByEmail_OrganizationDoesNotExists_ReturnsFailure()
         {
             // Arrange
             _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
@@ -144,8 +146,9 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Once);
         }
 
+        
         [Test]
-        public async Task GetCompanyByEmail_OrganizationExists_ShouldSuccess()
+        public async Task GetCompanyByEmail_OrganizationExists_ReturnSuccess()
         {
             // Arrange 
             _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
@@ -193,6 +196,8 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRespository.Verify(u => u.GetByNameAsync(email), Times.Never);
         }
 
+        
+        
         [Test]
         public async Task GetCompanyByName_OrganizationDoesNotExists_ShouldFail()
         {
@@ -218,6 +223,7 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRespository.Verify(u => u.GetByNameAsync(email), Times.Once);
         }
 
+        
         [Test]
         public async Task GetCompanyByName_OrganizationExists_ShouldSuccess()
         {
@@ -415,7 +421,7 @@ namespace JobHunt.Services.Employer.Tests
             var response = Result.Value as ResponseDto;
             Assert.That(response, Is.Not.Null);
             Assert.That(response.IsSuccess, Is.False);
-            Assert.That(response.Message, Is.EqualTo("Inavalid File [Ensure File Appropriate Extension and not more than 10MB]"));
+            Assert.That(response.Message, Is.EqualTo("Unsupported File Format"));
         }
 
         [Test]
@@ -436,7 +442,7 @@ namespace JobHunt.Services.Employer.Tests
             var response = Result.Value as ResponseDto;
             Assert.That(response, Is.Not.Null);
             Assert.That(response.IsSuccess, Is.False);
-            Assert.That(response.Message, Is.EqualTo("Inavalid File [Ensure File Appropriate Extension and not more than 10MB]"));
+            Assert.That(response.Message, Is.EqualTo("File Size cannot be more than 10MB"));
         }
     }
 }

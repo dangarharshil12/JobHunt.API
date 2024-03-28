@@ -49,7 +49,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
             return null;
         }
 
-        public async Task<Vacancy?> DeleteAsync(Vacancy vacancy)
+        public async Task<Vacancy> DeleteAsync(Vacancy vacancy)
         {
             _db.VacancyDetails.Remove(vacancy);
             await _db.SaveChangesAsync();
