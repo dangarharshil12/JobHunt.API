@@ -21,7 +21,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
 
         public async Task<Vacancy?> GetByIdAsync(Guid id)
         {
-            return _db.VacancyDetails.FirstOrDefault(x => x.Id == id);
+            return await _db.VacancyDetails.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Vacancy>?> GetByNameAsync(string name)
