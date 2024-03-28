@@ -30,7 +30,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
+        public async Task<IActionResult> GetApplicationsByUserId([FromRoute] Guid id)
         {
             if(id == Guid.Empty)
             {
@@ -55,7 +55,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> getApplicationsByVacancyId([FromRoute] Guid id)
+        public async Task<IActionResult> GetApplicationsByVacancyId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -91,7 +91,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Authorize(Roles = SD.RoleJobSeeker)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
+        public async Task<IActionResult> CreateApplication([FromBody] UserVacancyRequestDto request)
         {
             if (request == null)
             {
@@ -124,7 +124,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Authorize(Roles = SD.RoleEmployer)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> processApplication([FromBody] statusChangeRequestDto request)
+        public async Task<IActionResult> ProcessApplication([FromBody] statusChangeRequestDto request)
         {
             string status = request.status;
             var application = await _applicationRepository.GetDetailByIdAsync(request.id);
@@ -136,14 +136,14 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
-                if(status == "")
+                if(status == null || (status.Trim().ToUpper() != SD.Status_Accepted && status.Trim().ToUpper() != SD.Status_Rejected))
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "New Status is not Provided.";
+                    _response.Message = "Application Status should be either Accepted or Rejected.";
                 }
                 else
                 {
-                    application.ApplicationStatus = status;
+                    application.ApplicationStatus = status.Trim().ToUpper();
                     var result = await _applicationRepository.UpdateAsync(application);
                     if(result != null)
                     {
@@ -165,12 +165,12 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> pagination([FromBody] SP_VacancyRequestDto request)
+        public async Task<IActionResult> Pagination([FromBody] SP_VacancyRequestDto request)
         {
-            if(request == null)
+            if(request.VacancyId == Guid.Empty || request.StartIndex < 0 || request.PageSize < 1)
             {
                 _response.IsSuccess = false;
-                _response.Message = "Request is Empty";
+                _response.Message = "One or more of the Following Attributes are Invalid (VacancyId, StartIndex, PageSize)";
             }
             else
             {

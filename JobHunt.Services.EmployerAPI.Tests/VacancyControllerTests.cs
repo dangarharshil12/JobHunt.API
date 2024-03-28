@@ -16,8 +16,9 @@ namespace JobHunt.Services.EmployerAPI.Tests
     {
         private VacancyController _vacancyController;
         private IMapper _mapper;
-        private Mock<ICompanyRepository> _mockcompanyRespository;
-        private Mock<IVacancyRepository> _mockvacancyRespository;
+        private Mock<ICompanyRepository> _mockcompanyRepository;
+        private Mock<IVacancyRepository> _mockvacancyRepository;
+
         private List<Vacancy> _vacancylist;
         private Vacancy _vacancy;
         private Vacancy _updatedVacancy;
@@ -135,18 +136,18 @@ namespace JobHunt.Services.EmployerAPI.Tests
         [SetUp]
         public void Setup()
         {
-            _mockcompanyRespository = new Mock<ICompanyRepository>();
-            _mockvacancyRespository = new Mock<IVacancyRepository>();
+            _mockcompanyRepository = new Mock<ICompanyRepository>();
+            _mockvacancyRepository = new Mock<IVacancyRepository>();
             _mapper = MappingConfig.RegisterMaps().CreateMapper();
 
-            _vacancyController = new VacancyController(_mapper, _mockvacancyRespository.Object, _mockcompanyRespository.Object);
+            _vacancyController = new VacancyController(_mapper, _mockvacancyRepository.Object, _mockcompanyRepository.Object);
         }
 
         [Test]
         public async Task GetAllVacancies_ReturnVacancyList()
         {
             // Arrange
-            _mockvacancyRespository.Setup(u => u.GetAllAsync()).ReturnsAsync(_vacancylist);
+            _mockvacancyRepository.Setup(u => u.GetAllAsync()).ReturnsAsync(_vacancylist);
 
             // Act
             var result = await _vacancyController.GetAllVacancies();
@@ -161,7 +162,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.Result, Is.Not.Empty);
             Assert.That(response.Result, Is.InstanceOf<List<VacancyResponseDto>>());
 
-            _mockvacancyRespository.Verify(u => u.GetAllAsync(), Times.Once);
+            _mockvacancyRepository.Verify(u => u.GetAllAsync(), Times.Once);
         }
 
         [Test]
@@ -183,7 +184,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Id is Empty"));
 
-            _mockvacancyRespository.Verify(u => u.GetByIdAsync(userId), Times.Never);
+            _mockvacancyRepository.Verify(u => u.GetByIdAsync(userId), Times.Never);
         }
 
         [TestCase(true)]
@@ -204,10 +205,10 @@ namespace JobHunt.Services.EmployerAPI.Tests
             };
 
             Guid vacancyId = new Guid("61edda4f-ebdd-42f9-ed13-08dc39205bd7");
-            _mockvacancyRespository.Setup(r => r.CheckApplicationAsync(It.IsAny<Guid>(), vacancyId))
+            _mockvacancyRepository.Setup(r => r.CheckApplicationAsync(It.IsAny<Guid>(), vacancyId))
                 .ReturnsAsync(hasApplied);
 
-            _mockvacancyRespository.Setup(r => r.GetByIdAsync(vacancyId))
+            _mockvacancyRepository.Setup(r => r.GetByIdAsync(vacancyId))
                 .ReturnsAsync(_vacancy);
 
             // Act
@@ -243,7 +244,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Email is Empty"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Never);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Never);
         }
 
         [Test]
@@ -251,7 +252,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         {
             // Arrange
             string email = "organizationdoesnotexists@email.com";
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((Models.Employer)null);
 
             // Act
@@ -266,7 +267,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Employer Details Not Found"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Once);
         }
 
         [Test]
@@ -274,10 +275,10 @@ namespace JobHunt.Services.EmployerAPI.Tests
         {
             // Arrange
             var email = "demoemployer@email.com";
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(_employer);
 
-            _mockvacancyRespository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
+            _mockvacancyRepository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(_vacancylist);
 
             // Act
@@ -293,8 +294,8 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.Result, Is.Not.Empty);
             Assert.That(response.Result, Is.InstanceOf<List<VacancyResponseDto>>());
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Once);
-            _mockvacancyRespository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Once);
+            _mockvacancyRepository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
         }
 
         [Test]
@@ -317,7 +318,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public async Task AddVacnacy_OrganizationDoesNotExists_ReturnFailure()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((Models.Employer)null);
 
             // Act
@@ -332,17 +333,17 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Please Enter Organization Information"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
         }
 
         [Test]
         public async Task AddVacnacy_OrganizationExists_ReturnSuccess()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(_employer);
 
-            _mockvacancyRespository.Setup(u => u.CreateAsync(It.IsAny<Vacancy>()))
+            _mockvacancyRepository.Setup(u => u.CreateAsync(It.IsAny<Vacancy>()))
                 .ReturnsAsync(_vacancy);
 
             // Act
@@ -357,7 +358,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.True);
             Assert.That(response.Message, Is.EqualTo("Vacancy Created Successfully"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
         }
 
         [Test]
@@ -380,10 +381,10 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public async Task UpdateVacancy_VacancyRequest_ReturnsSuccess()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(_employer);
 
-            _mockvacancyRespository.Setup(u => u.UpdateAsync(It.IsAny<Vacancy>()))
+            _mockvacancyRepository.Setup(u => u.UpdateAsync(It.IsAny<Vacancy>()))
                 .ReturnsAsync(_updatedVacancy);
 
             // Act
@@ -398,7 +399,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.True);
             Assert.That(response.Message, Is.EqualTo("Vacnacy Updated Successfully"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(_newVacancyRequest.PublishedBy), Times.Once);
         }
 
         [Test]
@@ -421,7 +422,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public async Task DeleteVacancy_VacancyDoesNotExists_ReturnFailure()
         {
             // Arrange
-            _mockvacancyRespository.Setup(u => u.GetByIdAsync(It.IsAny<Guid>()))
+            _mockvacancyRepository.Setup(u => u.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Vacancy)null);
 
             // Act
@@ -436,17 +437,17 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Vacancy Not Found"));
 
-            _mockvacancyRespository.Verify(u => u.GetByIdAsync(new Guid("61edda4f-ebdd-42f9-ed13-08dc39205bd7")), Times.Once);
+            _mockvacancyRepository.Verify(u => u.GetByIdAsync(new Guid("61edda4f-ebdd-42f9-ed13-08dc39205bd7")), Times.Once);
         }
 
         [Test]
         public async Task DeleteVacancy_VacancyExists_ReturnsSuccess()
         {
             // Arrange
-            _mockvacancyRespository.Setup(u => u.GetByIdAsync(It.IsAny<Guid>()))
+            _mockvacancyRepository.Setup(u => u.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(_vacancy);
 
-            _mockvacancyRespository.Setup(u => u.DeleteAsync(It.IsAny<Vacancy>()))
+            _mockvacancyRepository.Setup(u => u.DeleteAsync(It.IsAny<Vacancy>()))
                 .ReturnsAsync(_vacancy);
 
             // Act
@@ -461,8 +462,8 @@ namespace JobHunt.Services.EmployerAPI.Tests
             Assert.That(response.IsSuccess, Is.True);
             Assert.That(response.Message, Is.EqualTo("Vacancy Deleted Successfully"));
 
-            _mockvacancyRespository.Verify(u => u.GetByIdAsync(new Guid("61edda4f-ebdd-42f9-ed13-08dc39205bd7")), Times.Once);
-            _mockvacancyRespository.Verify(u => u.DeleteAsync(_vacancy), Times.Once);
+            _mockvacancyRepository.Verify(u => u.GetByIdAsync(new Guid("61edda4f-ebdd-42f9-ed13-08dc39205bd7")), Times.Once);
+            _mockvacancyRepository.Verify(u => u.DeleteAsync(_vacancy), Times.Once);
         }
     }
 }

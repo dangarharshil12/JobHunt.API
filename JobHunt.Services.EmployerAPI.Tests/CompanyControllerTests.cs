@@ -23,7 +23,7 @@ namespace JobHunt.Services.Employer.Tests
     public class CompanyControllerTests
     {
         private CompanyController _companyController;
-        private Mock<ICompanyRepository> _mockcompanyRespository;
+        private Mock<ICompanyRepository> _mockcompanyRepository;
         private Mock<IImageRepository> _mockimageRespository;
         private IMapper _mapper;
         private EmployerDto _employer;
@@ -91,11 +91,11 @@ namespace JobHunt.Services.Employer.Tests
         [SetUp]
         public void Setup()
         {
-            _mockcompanyRespository = new Mock<ICompanyRepository>();
+            _mockcompanyRepository = new Mock<ICompanyRepository>();
             _mockimageRespository = new Mock<IImageRepository>();
             _mapper = MappingConfig.RegisterMaps().CreateMapper();
 
-            _companyController = new CompanyController(_mockcompanyRespository.Object, _mapper, _mockimageRespository.Object);
+            _companyController = new CompanyController(_mockcompanyRepository.Object, _mapper, _mockimageRespository.Object);
         }
 
         [TestCase(null)]
@@ -116,7 +116,7 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Email is Empty"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Never);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Never);
         }
 
         
@@ -125,7 +125,7 @@ namespace JobHunt.Services.Employer.Tests
         public async Task GetCompanyByEmail_OrganizationDoesNotExists_ReturnsFailure()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((EmployerAPI.Models.Employer)null);
 
             string email = "test@email.com";
@@ -143,7 +143,7 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Organization Information Not Found"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Once);
         }
 
         
@@ -151,7 +151,7 @@ namespace JobHunt.Services.Employer.Tests
         public async Task GetCompanyByEmail_OrganizationExists_ReturnSuccess()
         {
             // Arrange 
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(employer);
 
             string email = "info@greensolutions.com";
@@ -172,7 +172,7 @@ namespace JobHunt.Services.Employer.Tests
             var responseResult = response.Result as EmployerDto;
             Assert.That(responseResult, Is.Not.Null);
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(email), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Once);
         }
 
         [TestCase(null)]
@@ -193,7 +193,7 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Organization Name is Empty"));
 
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(email), Times.Never);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(email), Times.Never);
         }
 
         
@@ -202,7 +202,7 @@ namespace JobHunt.Services.Employer.Tests
         public async Task GetCompanyByName_OrganizationDoesNotExists_ShouldFail()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((EmployerAPI.Models.Employer)null);
 
             string email = "test@email.com";
@@ -220,7 +220,7 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Organization Information Not Found"));
 
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(email), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(email), Times.Once);
         }
 
         
@@ -228,7 +228,7 @@ namespace JobHunt.Services.Employer.Tests
         public async Task GetCompanyByName_OrganizationExists_ShouldSuccess()
         {
             // Arrange 
-            _mockcompanyRespository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(employer);
 
             string email = "info@greensolutions.com";
@@ -249,7 +249,7 @@ namespace JobHunt.Services.Employer.Tests
             var responseResult = response.Result as EmployerDto;
             Assert.That(responseResult, Is.Not.Null);
 
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(email), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(email), Times.Once);
         }
 
         [Test]
@@ -271,15 +271,15 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Request is Empty"));
 
-            _mockcompanyRespository.Verify(u => u.CreateAsync(_mapper.Map<EmployerAPI.Models.Employer>(request)), Times.Never);
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Never);
+            _mockcompanyRepository.Verify(u => u.CreateAsync(_mapper.Map<EmployerAPI.Models.Employer>(request)), Times.Never);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Never);
         }
 
         [Test]
         public async Task CreateCompany_OrganizationExists_ShouldFail()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(employer);
 
             // Act
@@ -295,18 +295,18 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Organization Information Not Found"));
 
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
-            _mockcompanyRespository.Verify(u => u.CreateAsync(_mapper.Map<EmployerAPI.Models.Employer>(_employer)), Times.Never);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
+            _mockcompanyRepository.Verify(u => u.CreateAsync(_mapper.Map<EmployerAPI.Models.Employer>(_employer)), Times.Never);
         }
 
         [Test]
         public async Task CreateCompany_OrganizationDoesNotExists_ShouldSuccess()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByNameAsync(_employer.Organization))
+            _mockcompanyRepository.Setup(u => u.GetByNameAsync(_employer.Organization))
                 .ReturnsAsync((EmployerAPI.Models.Employer)null);
 
-            _mockcompanyRespository.Setup(u => u.CreateAsync(It.IsAny<EmployerAPI.Models.Employer>()))
+            _mockcompanyRepository.Setup(u => u.CreateAsync(It.IsAny<EmployerAPI.Models.Employer>()))
                 .ReturnsAsync(employer);
             
 
@@ -326,14 +326,14 @@ namespace JobHunt.Services.Employer.Tests
             var responseResult = response.Result as EmployerDto;
             Assert.That(responseResult, Is.Not.Null);
 
-            _mockcompanyRespository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByNameAsync(_employer.Organization), Times.Once);
         }
 
         [Test]
         public async Task UpdateCompany_OrganizationDoesNotExists_ShouldFail()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((EmployerAPI.Models.Employer)null);
 
             // Act
@@ -349,17 +349,17 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.False);
             Assert.That(response.Message, Is.EqualTo("Organization Information Not Found"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(_employer.CreatedBy), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(_employer.CreatedBy), Times.Once);
         }
 
         [Test]
         public async Task UpdateCompany_OrganizationExists_ShouldSuccess()
         {
             // Arrange
-            _mockcompanyRespository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
+            _mockcompanyRepository.Setup(u => u.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(employer);
 
-            _mockcompanyRespository.Setup(u => u.UpdateAsync(It.IsAny<EmployerAPI.Models.Employer>()))
+            _mockcompanyRepository.Setup(u => u.UpdateAsync(It.IsAny<EmployerAPI.Models.Employer>()))
                 .ReturnsAsync(updatedEmployer);
 
             // Act
@@ -375,7 +375,7 @@ namespace JobHunt.Services.Employer.Tests
             Assert.That(response.IsSuccess, Is.True);
             Assert.That(response.Message, Is.EqualTo("Organization Information Updated Successfully"));
 
-            _mockcompanyRespository.Verify(u => u.GetByEmailAsync(_employer.CreatedBy), Times.Once);
+            _mockcompanyRepository.Verify(u => u.GetByEmailAsync(_employer.CreatedBy), Times.Once);
         }
 
         [Test]
