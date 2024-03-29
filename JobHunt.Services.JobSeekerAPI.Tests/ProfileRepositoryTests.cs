@@ -243,7 +243,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
         }
 
         [Test]
-        public async Task UpdateAsync_VacancyDoesNotExists_ReturnNull()
+        public async Task UpdateAsync_UserDoesNotExists_ReturnNull()
         {
             // Arrange
             using (var context = new ApplicationDbContext(options))

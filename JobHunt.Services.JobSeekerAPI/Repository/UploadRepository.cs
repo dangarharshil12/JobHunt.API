@@ -1,19 +1,16 @@
-﻿using JobHunt.Services.JobSeekerAPI.Data;
-using JobHunt.Services.JobSeekerAPI.Models.Dto;
+﻿using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 
 namespace JobHunt.Services.JobSeekerAPI.Repository
 {
-    public class UploadRespository : IUploadRepository
+    public class UploadRepository : IUploadRepository
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationDbContext _db;
-        public UploadRespository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public UploadRepository(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
-            _db = db;
         }
 
         public async Task<UploadDto> UploadResume(IFormFile file, UploadDto resume)

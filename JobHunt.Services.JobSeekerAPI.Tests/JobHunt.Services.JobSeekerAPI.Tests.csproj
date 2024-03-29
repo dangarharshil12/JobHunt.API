@@ -19,4 +19,9 @@
     <ProjectReference Include="..\JobHunt.Services.JobSeekerAPI\JobHunt.Services.JobSeekerAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="StaticFiles\Images\" />
+    <Folder Include="StaticFiles\Resumes\" />
+  </ItemGroup>
+
 </Project>

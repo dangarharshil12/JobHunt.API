@@ -34,7 +34,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IQualificationRepository, QualificationRepository>();
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
-builder.Services.AddScoped<IUploadRepository, UploadRespository>();
+builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 
 // Authorization for API
 builder.Services.AddSwaggerGen(option =>
