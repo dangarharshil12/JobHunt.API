@@ -1,15 +1,9 @@
-﻿using JobHunt.Services.EmployerAPI.Data;
-using JobHunt.Services.EmployerAPI.Models.Dto;
+﻿using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Services.EmployerAPI.Tests
 {
@@ -55,7 +49,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Url, Is.EqualTo("http://example.com/basepath/Images/test.jpg"));           
+            Assert.That(result.Url, Is.EqualTo("http://example.com/basepath/Images/test.jpg"));
         }
     }
 }

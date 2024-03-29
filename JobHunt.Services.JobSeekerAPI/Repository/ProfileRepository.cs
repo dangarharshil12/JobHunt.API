@@ -23,6 +23,11 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User?> GetByUserIdAsync(Guid userId)
+        {
+            return await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
         public async Task<User> CreateAsync(User user)
         {
             await _db.Users.AddAsync(user);
@@ -44,9 +49,6 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             return null;
         }
 
-        public async Task<User?> GetByUserIdAsync(Guid userId)
-        {
-            return await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        }
+
     }
 }

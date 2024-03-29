@@ -1,19 +1,12 @@
 ﻿using FluentAssertions;
 using JobHunt.Services.EmployerAPI.Data;
 using JobHunt.Services.EmployerAPI.Models;
-using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository;
 using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Services.EmployerAPI.Tests
 {
@@ -43,34 +36,34 @@ namespace JobHunt.Services.EmployerAPI.Tests
                 Id = new Guid("1A3D8C7E-DB11-45FE-C2B6-08DC3C361C6E"),
                 VacancyId = new Guid("61EDDA4F-EBDD-42F9-ED13-08DC39205BD7"),
                 UserId = new Guid("DFB764C1-0DEA-45A0-B04F-E138C0E08C22"),
-                AppliedDate = new DateTime(2024,04,03),
+                AppliedDate = new DateTime(2024, 04, 03),
                 ApplicationStatus = SD.Status_Submitted
             };
-            
+
             _updatedApplication1 = new UserVacancyRequest()
             {
                 Id = new Guid("1A3D8C7E-DB11-45FE-C2B6-08DC3C361C6E"),
                 VacancyId = new Guid("61EDDA4F-EBDD-42F9-ED13-08DC39205BD7"),
                 UserId = new Guid("DFB764C1-0DEA-45A0-B04F-E138C0E08C22"),
-                AppliedDate = new DateTime(2024,04,03),
+                AppliedDate = new DateTime(2024, 04, 03),
                 ApplicationStatus = SD.Status_Accepted
             };
-            
+
             _application2 = new UserVacancyRequest()
             {
                 Id = new Guid("79312940-DFF1-4CF0-DA80-08DC3C4CCEFD"),
                 VacancyId = new Guid("674DA545-6231-476E-E018-08DC3C4D373A"),
                 UserId = new Guid("DFB764C1-0DEA-45A0-B04F-E138C0E08C22"),
-                AppliedDate = new DateTime(2024,03,11),
+                AppliedDate = new DateTime(2024, 03, 11),
                 ApplicationStatus = SD.Status_Submitted
             };
-            
+
             _application3 = new UserVacancyRequest()
             {
                 Id = new Guid("297D6625-08CB-49A7-DA81-08DC3C4CCEFD"),
                 VacancyId = new Guid("674DA545-6231-476E-E018-08DC3C4D373A"),
                 UserId = new Guid("8EDBD66B-3289-4535-90EE-77448716C03A"),
-                AppliedDate = new DateTime(2024,03,11),
+                AppliedDate = new DateTime(2024, 03, 11),
                 ApplicationStatus = SD.Status_Submitted
             };
 
@@ -218,7 +211,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         }
 
         [Test]
-        public async Task GetDetailAsync_ApplicationExists_ReturnApplicationFromDatabase() 
+        public async Task GetDetailAsync_ApplicationExists_ReturnApplicationFromDatabase()
         {
             // Arrange
             Guid userId = new Guid("DFB764C1-0DEA-45A0-B04F-E138C0E08C22");

@@ -1,5 +1,4 @@
-﻿using JobHunt.Services.EmployerAPI.Data;
-using JobHunt.Services.EmployerAPI.Models.Dto;
+﻿using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
 
 namespace JobHunt.Services.EmployerAPI.Repository
