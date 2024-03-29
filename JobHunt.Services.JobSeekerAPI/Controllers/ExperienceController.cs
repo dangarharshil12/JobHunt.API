@@ -30,7 +30,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllExperiencesByUserId(Guid userId)
         {
-            if(userId == Guid.Empty)
+            if (userId == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "UserId is Empty";
@@ -40,7 +40,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 List<UserExperience> result = await _experienceRepository.GetAllByUserIdAsync(userId);
                 List<UserExperienceResponseDto> response = [];
 
-                foreach(var item in result)
+                foreach (var item in result)
                 {
                     response.Add(_mapper.Map<UserExperienceResponseDto>(item));
                 }
@@ -56,7 +56,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetExperienceById(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -65,7 +65,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             {
                 var result = await _experienceRepository.GetByIdAsync(id);
 
-                if(result == null)
+                if (result == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "No Experiences Found";
@@ -86,7 +86,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AddExperience([FromBody] UserExperienceRequestDto request)
         {
-            if(request == null)
+            if (request == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Request is Empty";
@@ -110,7 +110,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateExperience([FromBody] UserExperienceRequestDto request, [FromRoute] Guid id)
         {
-            if(id == Guid.Empty || request == null)
+            if (id == Guid.Empty || request == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id or Request is Empty";
@@ -143,7 +143,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteExperience([FromRoute] Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -151,7 +151,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             else
             {
                 UserExperience experience = await _experienceRepository.GetByIdAsync(id);
-                if(experience == null)
+                if (experience == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Experience Not Found";

@@ -22,7 +22,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
         public async Task<Qualification?> GetByIdAsync(Guid id)
         {
             Qualification qualification = await _db.Qualifications.FirstOrDefaultAsync(x => x.Id == id);
-            if(qualification == null)
+            if (qualification == null)
             {
                 return null;
             }

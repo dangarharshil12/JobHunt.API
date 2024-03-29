@@ -59,7 +59,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
         public async Task<bool> CheckApplicationAsync(Guid userId, Guid vacancyId)
         {
             var result = await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.VacancyId == vacancyId && u.UserId == userId);
-            if(result != null)
+            if (result != null)
             {
                 return true;
             }

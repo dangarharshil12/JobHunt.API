@@ -8,8 +8,8 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
     public class ProfileRepository : IProfileRepository
     {
         private readonly ApplicationDbContext _db;
-        public ProfileRepository(ApplicationDbContext db) 
-        { 
+        public ProfileRepository(ApplicationDbContext db)
+        {
             _db = db;
         }
 

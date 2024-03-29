@@ -3,7 +3,6 @@ using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace JobHunt.Services.EmployerAPI.Repository
 {

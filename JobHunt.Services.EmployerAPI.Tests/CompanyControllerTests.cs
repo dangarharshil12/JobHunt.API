@@ -1,21 +1,12 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using JobHunt.Services.EmployerAPI;
 using JobHunt.Services.EmployerAPI.Controllers;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
-using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Services.Employer.Tests
 {
@@ -119,8 +110,8 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Never);
         }
 
-        
-        
+
+
         [Test]
         public async Task GetCompanyByEmail_OrganizationDoesNotExists_ReturnsFailure()
         {
@@ -146,7 +137,7 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRepository.Verify(u => u.GetByEmailAsync(email), Times.Once);
         }
 
-        
+
         [Test]
         public async Task GetCompanyByEmail_OrganizationExists_ReturnSuccess()
         {
@@ -196,8 +187,8 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRepository.Verify(u => u.GetByNameAsync(email), Times.Never);
         }
 
-        
-        
+
+
         [Test]
         public async Task GetCompanyByName_OrganizationDoesNotExists_ShouldFail()
         {
@@ -223,7 +214,7 @@ namespace JobHunt.Services.Employer.Tests
             _mockcompanyRepository.Verify(u => u.GetByNameAsync(email), Times.Once);
         }
 
-        
+
         [Test]
         public async Task GetCompanyByName_OrganizationExists_ShouldSuccess()
         {
@@ -308,7 +299,7 @@ namespace JobHunt.Services.Employer.Tests
 
             _mockcompanyRepository.Setup(u => u.CreateAsync(It.IsAny<EmployerAPI.Models.Employer>()))
                 .ReturnsAsync(employer);
-            
+
 
             // Act
             var result = await _companyController.CreateCompany(_employer);

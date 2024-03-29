@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using JobHunt.Services.EmployerAPI.Controllers;
 using JobHunt.Services.EmployerAPI.Models;
 using JobHunt.Services.EmployerAPI.Models.Dto;
@@ -8,8 +7,6 @@ using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using System.Net;
-using System.Numerics;
 
 namespace JobHunt.Services.EmployerAPI.Tests
 {
@@ -255,7 +252,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
                 VacancyId = new Guid("61EDDA4F-EBDD-42F9-ED13-08DC39205BD7"),
                 PageSize = 2,
                 StartIndex = -1
-            };                        
+            };
         }
 
         [SetUp]
@@ -597,11 +594,12 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public async Task Pagination_InvalidRequest_ReturnsFailure()
         {
             // Arrange
-            List<SP_VacancyRequestDto> requestArray = [_request1,  _request2, _request3, _request4];
+            List<SP_VacancyRequestDto> requestArray = [_request1, _request2, _request3, _request4];
             List<IActionResult> resultArray = [];
 
             // Act
-            foreach (var request in requestArray) {
+            foreach (var request in requestArray)
+            {
                 var result = await _applicationController.Pagination(request);
                 resultArray.Add(result);
             }

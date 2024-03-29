@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using JobHunt.Services.AuthAPI.Models;
+﻿using JobHunt.Services.AuthAPI.Models;
 using JobHunt.Services.AuthAPI.Models.Dto;
 using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +29,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
         {
             // Checking whether user already exists or not
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
-            if(existingUser != null)
+            if (existingUser != null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "User with this email already exist. Please Login";
@@ -126,15 +125,15 @@ namespace JobHunt.Services.AuthAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ForgotPassword([FromBody] LoginRequstDto request)
         {
-            if(request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+            if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
             {
-                _response.IsSuccess= false;
+                _response.IsSuccess = false;
                 _response.Message = "Incomplete Credentials (Either Email or Password or both are Empty)";
             }
             else
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                if(user == null)
+                if (user == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "User does not exist. Please Register";
@@ -143,7 +142,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var identityResult = await _userManager.ResetPasswordAsync(user, token, request.Password);
-                    if(identityResult.Succeeded)
+                    if (identityResult.Succeeded)
                     {
                         _response.Message = "Password Reset Successfull";
                     }

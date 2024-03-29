@@ -46,9 +46,9 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetProfileByEmail([FromRoute] string email) 
+        public async Task<IActionResult> GetProfileByEmail([FromRoute] string email)
         {
-            if(email == null)
+            if (email == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Email is Empty";
@@ -57,7 +57,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             {
                 User result = await _profileRepository.GetByEmailAsync(email);
 
-                if(result == null)
+                if (result == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Profile not found";
@@ -106,7 +106,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [Authorize(Roles = SD.RoleJobSeeker)]
         public async Task<IActionResult> AddProfile(UserDto user)
         {
-            if(user == null)
+            if (user == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "User is Empty";
@@ -158,7 +158,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateProfile([FromBody] UserDto user)
         {
-            if(user == null)
+            if (user == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "User is Empty";
@@ -168,7 +168,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 User request = _mapper.Map<User>(user);
 
                 var result = await _profileRepository.UpdateAsync(request);
-                if(result != null)
+                if (result != null)
                 {
                     UserDto response = _mapper.Map<UserDto>(result);
                     _response.Result = response;

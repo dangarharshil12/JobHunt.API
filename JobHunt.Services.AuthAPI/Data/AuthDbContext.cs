@@ -10,7 +10,7 @@ namespace JobHunt.Services.AuthAPI.Data
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

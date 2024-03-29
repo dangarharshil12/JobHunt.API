@@ -30,7 +30,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllQualifications(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -40,7 +40,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 List<Qualification> result = await _qualificationRepository.GetAllByUserIdAsync(id);
                 List<QualificationResponseDto> response = [];
 
-                foreach(var item in result)
+                foreach (var item in result)
                 {
                     response.Add(_mapper.Map<QualificationResponseDto>(item));
                 }
@@ -56,7 +56,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetQualificationById(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -64,7 +64,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             else
             {
                 var result = await _qualificationRepository.GetByIdAsync(id);
-                if(result == null)
+                if (result == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Qualification Not Found";
@@ -85,7 +85,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateQualification([FromBody] QualificationRequestDto request)
         {
-            if(request == null)
+            if (request == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Request is Empty";
@@ -140,7 +140,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteQualification([FromRoute] Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -148,7 +148,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             else
             {
                 Qualification qualification = await _qualificationRepository.GetByIdAsync(id);
-                if(qualification == null)
+                if (qualification == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Qualification Not Found";

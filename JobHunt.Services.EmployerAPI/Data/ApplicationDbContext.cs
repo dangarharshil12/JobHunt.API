@@ -9,7 +9,7 @@ namespace JobHunt.Services.EmployerAPI.Data
         {
 
         }
-        public DbSet<Employer> Employers { get; set; } 
+        public DbSet<Employer> Employers { get; set; }
         public DbSet<Vacancy> VacancyDetails { get; set; }
         public DbSet<UserVacancyRequest> UserVacancyRequests { get; set; }
     }

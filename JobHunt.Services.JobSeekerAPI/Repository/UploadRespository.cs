@@ -1,8 +1,6 @@
 ﻿using JobHunt.Services.JobSeekerAPI.Data;
 using JobHunt.Services.JobSeekerAPI.Models.Dto;
 using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace JobHunt.Services.JobSeekerAPI.Repository
 {
@@ -34,7 +32,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Resumes/{resume.FileName}{resume.FileExtension}";
 
             resume.Url = urlPath;
-            return resume;            
+            return resume;
         }
 
         public async Task<UploadDto> UploadImage(IFormFile file, UploadDto image)

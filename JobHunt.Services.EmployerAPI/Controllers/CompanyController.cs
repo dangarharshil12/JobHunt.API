@@ -6,8 +6,6 @@ using JobHunt.Services.EmployerAPI.Repository.IRepository;
 using JobHunt.Services.EmployerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.IdentityModel.Tokens;
 
 namespace JobHunt.Services.EmployerAPI.Controllers
 {
@@ -33,7 +31,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyByEmail([FromRoute] string email)
         {
-            if(email == null || email.Trim() == "")
+            if (email == null || email.Trim() == "")
             {
                 _response.IsSuccess = false;
                 _response.Message = "Email is Empty";
@@ -77,7 +75,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 else
                 {
                     var response = _mapper.Map<EmployerDto>(result);
-                    _response.Result= response;
+                    _response.Result = response;
                 }
             }
             return Ok(_response);
@@ -90,7 +88,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateCompany([FromBody] EmployerDto request)
         {
-            if(request == null)
+            if (request == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Request is Empty";
@@ -109,7 +107,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                     var result = await _companyRepository.CreateAsync(employer);
                     EmployerDto response = _mapper.Map<EmployerDto>(result);
                     _response.Message = "Organization Profile Created Successfully!";
-                    _response.Result= response;
+                    _response.Result = response;
                 }
             }
             return Ok(_response);
@@ -132,9 +130,9 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 Employer employer = _mapper.Map<Employer>(request);
                 employer.Id = result.Id;
-                
+
                 result = await _companyRepository.UpdateAsync(employer);
-                    
+
                 _response.Message = "Organization Information Updated Successfully";
                 _response.Result = _mapper.Map<EmployerDto>(result);
             }
@@ -166,7 +164,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 _response.IsSuccess = false;
                 _response.Message = string.Join(" | ", ModelState.Values
                     .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)); 
+                    .Select(e => e.ErrorMessage));
             }
             return Ok(_response);
         }

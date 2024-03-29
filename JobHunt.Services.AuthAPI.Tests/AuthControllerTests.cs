@@ -4,15 +4,9 @@ using JobHunt.Services.AuthAPI.Models.Dto;
 using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using JobHunt.Services.AuthAPI.Utility;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Services.AuthAPI.Tests
 {

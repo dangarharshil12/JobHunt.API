@@ -83,9 +83,9 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
-                await repository.CreateAsync(_vacancy1);
-                await repository.CreateAsync(_vacancy2);
+                await context.VacancyDetails.AddAsync(_vacancy1);
+                await context.VacancyDetails.AddAsync(_vacancy2);
+                await context.SaveChangesAsync();
             }
 
             // Act
@@ -107,8 +107,8 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
-                await repository.CreateAsync(_vacancy1);
+                await context.VacancyDetails.AddAsync(_vacancy1);
+                await context.SaveChangesAsync();
             }
 
             // Act 
@@ -124,7 +124,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         }
 
         [Test]
-        public async Task GetByNameAsync_Vacancy1_ChecktheVacancyFromDatabase()
+        public async Task GetByNameAsync_Vacancy2AndVacancy3_ChecktheVacancyFromDatabase()
         {
             // Arrange
             var expecedList = new List<Vacancy> { _vacancy2, _vacancy3 };
@@ -132,9 +132,9 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
-                await repository.CreateAsync(_vacancy2);
-                await repository.CreateAsync(_vacancy3);
+                await context.VacancyDetails.AddAsync(_vacancy2);
+                await context.VacancyDetails.AddAsync(_vacancy3);
+                await context.SaveChangesAsync();
             }
 
             // Act 
@@ -195,8 +195,8 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
-                await repository.CreateAsync(_vacancy1);
+                await context.VacancyDetails.AddAsync(_vacancy1);
+                await context.SaveChangesAsync();
             }
 
             // Act
@@ -237,7 +237,6 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
             }
 
             // Act
@@ -259,8 +258,8 @@ namespace JobHunt.Services.EmployerAPI.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureDeleted();
-                var repository = new VacancyRepository(context);
-                await repository.CreateAsync(_vacancy1);
+                await context.VacancyDetails.AddAsync(_vacancy1);
+                await context.SaveChangesAsync();
             }
 
             // Act

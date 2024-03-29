@@ -32,7 +32,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetApplicationsByUserId([FromRoute] Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Id is Empty";
@@ -102,7 +102,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             {
                 UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
                 var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
-                if(existingVacancy != null)
+                if (existingVacancy != null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "You have Already Applied";
@@ -129,14 +129,14 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             string status = request.status;
             var application = await _applicationRepository.GetDetailByIdAsync(request.id);
 
-            if(application == null) 
-            { 
+            if (application == null)
+            {
                 _response.IsSuccess = false;
                 _response.Message = "Job Application Not Found";
             }
             else
             {
-                if(status == null || (status.Trim().ToUpper() != SD.Status_Accepted && status.Trim().ToUpper() != SD.Status_Rejected))
+                if (status == null || (status.Trim().ToUpper() != SD.Status_Accepted && status.Trim().ToUpper() != SD.Status_Rejected))
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Application Status should be either Accepted or Rejected.";
@@ -145,7 +145,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                 {
                     application.ApplicationStatus = status.Trim().ToUpper();
                     var result = await _applicationRepository.UpdateAsync(application);
-                    if(result != null)
+                    if (result != null)
                     {
                         _response.Result = _mapper.Map<UserVacancyResponseDto>(result);
                         _response.Message = "Status Updated Successfully";
@@ -167,7 +167,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Pagination([FromBody] SP_VacancyRequestDto request)
         {
-            if(request.VacancyId == Guid.Empty || request.StartIndex < 0 || request.PageSize < 1)
+            if (request.VacancyId == Guid.Empty || request.StartIndex < 0 || request.PageSize < 1)
             {
                 _response.IsSuccess = false;
                 _response.Message = "One or more of the Following Attributes are Invalid (VacancyId, StartIndex, PageSize)";
@@ -191,8 +191,9 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                     item.User = users.FirstOrDefault(u => u.Id == item.UserId);
                 }
 
-                _response.Result = new {
-                    totalRecords= response.FirstOrDefault()?.TotalRecords,
+                _response.Result = new
+                {
+                    totalRecords = response.FirstOrDefault()?.TotalRecords,
                     results = response
                 };
             }

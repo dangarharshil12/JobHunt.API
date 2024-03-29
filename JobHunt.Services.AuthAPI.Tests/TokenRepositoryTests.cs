@@ -2,17 +2,10 @@
 using JobHunt.Services.AuthAPI.Repositories;
 using JobHunt.Services.AuthAPI.Repositories.IRepositories;
 using JobHunt.Services.AuthAPI.Utility;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Services.AuthAPI.Tests
 {

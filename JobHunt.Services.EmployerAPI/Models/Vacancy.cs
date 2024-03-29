@@ -8,7 +8,7 @@ namespace JobHunt.Services.EmployerAPI.Models
         [Required]
         public string PublishedBy { get; set; }
         [Required]
-        public DateTime PublishedDate { get; set;}
+        public DateTime PublishedDate { get; set; }
         [Required]
         public int NoOfVacancies { get; set; }
         [Required]
