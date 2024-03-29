@@ -144,6 +144,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
             // Assert
             Assert.That(userFromDb, Is.Null);
         }
+
         [Test]
         public async Task GetByUserIdAsync_UserExists_ReturnUserFromDatabase()
         {
@@ -215,7 +216,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
         }
 
         [Test]
-        public async Task UpdateAsync_User11_CheckUpdatedValuesFromDatabase()
+        public async Task UpdateAsync_User1_CheckUpdatedValuesFromDatabase()
         {
             // Arrange
             using (var context = new ApplicationDbContext(options))

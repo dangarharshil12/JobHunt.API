@@ -16,7 +16,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
-        public async Task<UploadDto> Upload(IFormFile file, UploadDto resume)
+        public async Task<UploadDto> UploadResume(IFormFile file, UploadDto resume)
         {
             var localPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Resumes", $"{resume.FileName}{resume.FileExtension}");
             FileInfo oldFile = new FileInfo(localPath);

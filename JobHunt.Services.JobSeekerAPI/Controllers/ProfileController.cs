@@ -140,7 +140,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                     FileName = fileName
                 };
 
-                resume = await _uploadRepository.Upload(file, resume);
+                resume = await _uploadRepository.UploadResume(file, resume);
                 _response.Result = resume.Url;
             }
             else

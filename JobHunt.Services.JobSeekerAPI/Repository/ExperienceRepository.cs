@@ -14,7 +14,7 @@ namespace JobHunt.Services.JobSeekerAPI.Repository
             _db = db;
         }
 
-        public async Task<List<UserExperience>?> GetAllByUserIdAsync(Guid id)
+        public async Task<List<UserExperience>> GetAllByUserIdAsync(Guid id)
         {
             return await _db.UserExperiences.Where(u => u.UserId == id).ToListAsync();
         }
