@@ -15,14 +15,6 @@ namespace JobHunt.Services.EmployerAPI.Repository
             _db = db;
         }
 
-        public async Task<UserVacancyRequest> CreateAsync(UserVacancyRequest request)
-        {
-            await _db.UserVacancyRequests.AddAsync(request);
-            await _db.SaveChangesAsync();
-
-            return request;
-        }
-
         public async Task<List<UserVacancyRequest>> GetAllByUserIdAsync(Guid userId)
         {
             var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
@@ -48,14 +40,20 @@ namespace JobHunt.Services.EmployerAPI.Repository
         public List<UserVacancyRequest> GetAllVacancyByPageAsync(SP_VacancyRequestDto request)
         {
             // Basic SP with pagination only
-            // var result = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();
-            // List<UserVacancyRequest> response = result;
+            // List<UserVacancyRequest> response = _db.UserVacancyRequests.FromSql($"SP_JobApplications @vacancyId = {request.VacancyId}, @page = {request.PageNumber}, @recordsperpage = {request.PageSize}").ToList();
 
             // Modified SP with global searching, sorting, advanced searching and pagination
-            var result = _db.UserVacancyRequests.FromSql($"GET_JOBAPPLICATION_LIST @SEARCH_TEXT={request.SearchText}, @SORT_COLUMN_NAME={request.SortCoumnName}, @SORT_COLUMN_DIRECTION={request.SortCoumnDirection}, @START_INDEX={request.StartIndex}, @PAGE_SIZE={request.PageSize}, @VACANCY_ID={request.VacancyId}, @FULLNAME={request.FullName}, @EMAIL={request.Email}, @FROMDATE={request.FromDate}, @TODATE={request.ToDate}, @APPLICATIONSTATUS={request.ApplicationStatus}").ToList();
-            List<UserVacancyRequest> response = result;
+            List<UserVacancyRequest> response = _db.UserVacancyRequests.FromSql($"GET_JOBAPPLICATION_LIST @SEARCH_TEXT={request.SearchText}, @SORT_COLUMN_NAME={request.SortCoumnName}, @SORT_COLUMN_DIRECTION={request.SortCoumnDirection}, @START_INDEX={request.StartIndex}, @PAGE_SIZE={request.PageSize}, @VACANCY_ID={request.VacancyId}, @FULLNAME={request.FullName}, @EMAIL={request.Email}, @FROMDATE={request.FromDate}, @TODATE={request.ToDate}, @APPLICATIONSTATUS={request.ApplicationStatus}").ToList();
 
             return response;
+        }
+
+        public async Task<UserVacancyRequest> CreateAsync(UserVacancyRequest request)
+        {
+            await _db.UserVacancyRequests.AddAsync(request);
+            await _db.SaveChangesAsync();
+
+            return request;
         }
 
         public async Task<UserVacancyRequest?> UpdateAsync(UserVacancyRequest request)

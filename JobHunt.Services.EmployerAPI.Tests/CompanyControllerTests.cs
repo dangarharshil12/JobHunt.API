@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using JobHunt.Services.EmployerAPI;
 using JobHunt.Services.EmployerAPI.Controllers;
 using JobHunt.Services.EmployerAPI.Models.Dto;
 using JobHunt.Services.EmployerAPI.Repository.IRepository;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 
-namespace JobHunt.Services.Employer.Tests
+namespace JobHunt.Services.EmployerAPI.Tests
 {
     [TestFixture]
     public class CompanyControllerTests
