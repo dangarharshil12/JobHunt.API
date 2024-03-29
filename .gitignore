@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /JobHunt.Services.JobSeekerAPI/Resumes
 /JobHunt.Services.EmployerAPI/Images
 /JobHunt.Services.JobSeekerAPI/Images
+/JobHunt.Services.EmployerAPI.Tests/Images
