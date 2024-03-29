@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2E51BB0B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.AuthAPI.Tests", "JobHunt.Services.AuthAPI.Tests\JobHunt.Services.AuthAPI.Tests.csproj", "{0D747466-D5F3-4EBC-A241-4BDA55B7EDED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.EmployerAPI.Tests", "JobHunt.Services.EmployerAPI.Tests\JobHunt.Services.EmployerAPI.Tests.csproj", "{E13E7300-5897-4EE9-860F-46425650EE1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.EmployerAPI.Tests", "JobHunt.Services.EmployerAPI.Tests\JobHunt.Services.EmployerAPI.Tests.csproj", "{E13E7300-5897-4EE9-860F-46425650EE1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

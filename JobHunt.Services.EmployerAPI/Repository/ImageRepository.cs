@@ -8,13 +8,11 @@ namespace JobHunt.Services.EmployerAPI.Repository
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationDbContext _db;
 
-        public ImageRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public ImageRepository(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
-            _db = db;
         }
 
         public async Task<CompanyLogoDTO> Upload(IFormFile file, CompanyLogoDTO companyLogoDTO)
